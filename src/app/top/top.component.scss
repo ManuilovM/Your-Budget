@@ -1,0 +1,42 @@
+@import "../app.component.scss";
+
+
+.oun-title, .oun-input-icon, .oun-input-icond{
+ @include none-user-select();
+}
+
+.oun-title{
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: $topHight;
+    box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 0.5px 10px 0px rgba(0, 0, 0, 0.12);
+    // background title
+    background-color: $titleBackground;
+
+    .total-badget{
+        text-transform: uppercase; 
+        font-weight: 500;
+
+    }
+    .oun-input-icon{
+        
+        display: flex;
+        height: $topHight;
+        align-items: center; 
+        z-index: 0;
+
+        cursor: pointer;
+        margin-right: 18px;
+        
+        .oun-input-icond{
+            margin-right: 18px;
+            align-items: center; 
+            font-size: 35px;
+        }
+    }
+   
+
+}
+

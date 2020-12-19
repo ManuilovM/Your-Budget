@@ -1,0 +1,31 @@
+@import "../../app.component.scss";
+
+table {
+    width: 100%;
+
+  }
+  td{
+    cursor: pointer;
+  }
+  td.description{
+    position: relative;
+    padding-right: 30px;
+  }
+
+
+ .red{
+      background-color: $redBackgroundItem ;
+      color: black;
+    }
+ .green{
+      background-color: $greenBackgroundItem;
+      color: black;
+    }
+    mat-icon{
+      @include none-user-select();
+      cursor: pointer;
+      position: absolute;
+      right: 15px;
+      top: 10px;
+    }
+  
