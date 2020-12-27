@@ -4,9 +4,11 @@
 
       <mat-form-field class="example-form-field">
         <input placeholder="Сумма" matInput type="number" formControlName="amount">
+        <mat-error *ngIf="budgetForm.controls.amount.invalid">Введите сумму</mat-error>
       </mat-form-field>
       <mat-form-field class="example-form-field">
         <input placeholder="Дата" matInput type="date" formControlName="date" >
+        <mat-error *ngIf="budgetForm.controls.date.invalid">Выберите дату</mat-error>
       </mat-form-field>
       <mat-form-field class="example-full-width">
           <input type="text"
@@ -20,6 +22,7 @@
               {{option}}
             </mat-option>
           </mat-autocomplete>
+          <mat-error *ngIf="budgetForm.controls.category.invalid">Выберите категорию</mat-error>
      </mat-form-field>
      <mat-form-field class="example-form-field">
        <input matInput placeholder="Комментарий" type="text" formControlName="description">

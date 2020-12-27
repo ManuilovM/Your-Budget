@@ -1,6 +1,6 @@
 import { stringify } from "@angular/compiler/src/util";
 import { Component, OnInit } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
 import { map, startWith } from "rxjs/operators";
 import { BudgetItemsService } from "src/app/budget-items.service";
@@ -12,10 +12,10 @@ import { BudgetItemsService } from "src/app/budget-items.service";
 })
 export class BudgetItemFormComponent implements OnInit {
   budgetForm: FormGroup = new FormGroup({
-    amount: new FormControl(),
-    date: new FormControl(this._formatDate(new Date())),
-    category: new FormControl(),
-    description: new FormControl(),
+    amount: new FormControl( null, Validators.required),
+    date: new FormControl(this._formatDate(new Date()),Validators.required),
+    category: new FormControl("", Validators.required),
+    description: new FormControl(""),
   });
   filteredOptions: Observable<string[]>;
   categories: string[] ;
@@ -38,7 +38,7 @@ export class BudgetItemFormComponent implements OnInit {
     categoryArr.forEach((item :string) =>{
       if (arrRes.indexOf(item)==-1) arrRes.push(item);
     })
-   
+   this.budgetForm.controls.amount
     return   arrRes;
   }
 
