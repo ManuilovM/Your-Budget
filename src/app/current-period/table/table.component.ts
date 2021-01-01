@@ -14,8 +14,8 @@ import { BudgetItemsService } from 'src/app/budget-items.service';
   styleUrls: ['./table.component.scss']
 })
 export class TableComponent implements AfterViewInit {
-  BUDGET_ITEMS_DATA: BudgetItem[] = this.budgetItemsService.getBudgetItems();
-  budgetItems = new MatTableDataSource<BudgetItem>(this.BUDGET_ITEMS_DATA);
+  BUDGET_ITEMS_DATA: BudgetItem[];
+  budgetItems;
   tableColumns:string[]=["amount", "date", "category", "description"]
 
   constructor(private budgetItemsService: BudgetItemsService){
@@ -28,8 +28,14 @@ export class TableComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngAfterViewInit() {
-    this.budgetItems.paginator = this.paginator;
+    this.budgetItemsService.getBudgetItems();
+
     document.addEventListener("DOMContentLoaded", this._ready);
+    this.budgetItemsService.subject.subscribe({next: bItems=>{
+      this.BUDGET_ITEMS_DATA = bItems;
+      this.budgetItems = new MatTableDataSource<BudgetItem>(this.BUDGET_ITEMS_DATA);
+      this.budgetItems.paginator = this.paginator;
+    }})
   }
 
   

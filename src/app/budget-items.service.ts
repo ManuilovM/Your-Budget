@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 import {BudgetItem} from '..//app/budget-item'; 
 
 @Injectable({
@@ -6,17 +7,20 @@ import {BudgetItem} from '..//app/budget-item';
 })
 export class BudgetItemsService {
 
-  private budgetItems: BudgetItem[]=[
-    {amount: 300 , date: '2020-12-19', category: 'еда',description: ''},
-    {amount: -1300 , date: '2020-12-19', category: 'вещи',description: ''}
-  ];
+  private budgetItems: BudgetItem[]=[  ];
+   subject = new Subject<BudgetItem[]>();
 
   constructor() { }
+
+  
   
   addBudgetItem(item: BudgetItem){
     this.budgetItems.push(item);
+    this.subject.next(this.budgetItems);
   }
-  getBudgetItems(): BudgetItem[]{
-    return this.budgetItems;
+  
+
+  getBudgetItems(){
+    this.subject.next(this.budgetItems);
   }
 }

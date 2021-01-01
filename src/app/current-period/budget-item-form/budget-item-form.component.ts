@@ -1,4 +1,4 @@
-import { stringify } from "@angular/compiler/src/util";
+
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
@@ -29,9 +29,26 @@ export class BudgetItemFormComponent implements OnInit {
       startWith(""),
       map((value) => this._filter(value))
     );
-    this.categories = this.budgetItemsService.getBudgetItems().map(item=> item.category);
-    this.categories= this._filterCategory(this.categories);
+
+   this.budgetItemsService.getBudgetItems();
+
+
+    this.budgetItemsService.subject.subscribe({
+      next: bItems=> {
+        this.categories = bItems.map(item=> item.category);
+        this.categories= this._filterCategory(this.categories);
+      }
+    })
   }
+
+  submit(){
+    this.budgetItemsService.addBudgetItem(this.budgetForm.value);
+    this.budgetForm.controls.amount.reset();
+    this.budgetForm.controls.category.setValue('');
+}
+
+
+
 
   private _filterCategory(categoryArr: string[]) {
     let arrRes: string[] =[];

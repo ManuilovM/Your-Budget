@@ -13,8 +13,13 @@ export class AppComponent implements OnInit {
   constructor(private totalbudgetService: TotalBudgetService ){
 
   }
+
   ngOnInit(){
-  this.totalBudget = this.totalbudgetService.getTotalBudget();
+ this.totalbudgetService.getTotalBudget();
+    this.totalbudgetService.subject.subscribe({next: tBudget=>{
+      this.totalBudget = tBudget;
+    }})
+
   }
 
 }
