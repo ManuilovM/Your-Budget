@@ -1,6 +1,6 @@
 export class BudgetItem {
     amount: number;
-    date: string;
+    date: Date;
     category: string;
     description: string;
 }

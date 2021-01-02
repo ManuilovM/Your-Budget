@@ -22,6 +22,9 @@ import {MatButtonModule} from '@angular/material/button';
 import { TableComponent } from './current-period/table/table.component';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+
+
 
 
 @NgModule({
@@ -31,7 +34,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     CurrentPeriodComponent,
     FullAnalitikComponent,
     BudgetItemFormComponent,
-    TableComponent
+    TableComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,7 +48,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     ReactiveFormsModule,
     MatButtonModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSnackBarModule,
     
 
   ],

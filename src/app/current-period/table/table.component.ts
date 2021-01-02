@@ -38,6 +38,12 @@ export class TableComponent implements AfterViewInit {
     }})
   }
 
+  deleteBudgetItem(e){
+    let elem  = e.currentTarget;
+    let index: number = +elem.children[0].innerHTML
+    this.budgetItemsService.deleteBudgetItem(index);
+  }
+
   
 
 }

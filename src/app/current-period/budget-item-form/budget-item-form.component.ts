@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
 import { map, startWith } from "rxjs/operators";
 import { BudgetItemsService } from "src/app/budget-items.service";
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: "app-budget-item-form",
@@ -18,9 +19,9 @@ export class BudgetItemFormComponent implements OnInit {
     description: new FormControl(""),
   });
   filteredOptions: Observable<string[]>;
-  categories: string[] ;
+  categories: string[] =[] ;
 
-  constructor(private budgetItemsService: BudgetItemsService ) {}
+  constructor(private budgetItemsService: BudgetItemsService, private _snackBar: MatSnackBar ) {}
 
   ngOnInit() {
     this.filteredOptions = this.budgetForm.controls[
@@ -37,17 +38,26 @@ export class BudgetItemFormComponent implements OnInit {
       next: bItems=> {
         this.categories = bItems.map(item=> item.category);
         this.categories= this._filterCategory(this.categories);
+        this.budgetForm.controls.category.setValue('');
       }
     })
   }
 
   submit(){
-    this.budgetItemsService.addBudgetItem(this.budgetForm.value);
+    let bItem: any = this.budgetForm.value;
+    bItem.date = new Date(bItem.date);
+    this.budgetItemsService.addBudgetItem(bItem);
+    this.shoCompleteMessage();
     this.budgetForm.controls.amount.reset();
     this.budgetForm.controls.category.setValue('');
+
 }
 
-
+  shoCompleteMessage(){
+    this._snackBar.open("Запись добавлена","Успешно", {
+      duration: 2000,
+    });
+  }
 
 
   private _filterCategory(categoryArr: string[]) {

@@ -8,7 +8,8 @@ import {BudgetItemsService} from './budget-items.service';
 })
 export class TotalBudgetService {
  
-  totalBudget: number =0;
+  totalBudget: number = 0;
+  
   constructor(private budgetItemsService: BudgetItemsService ) { 
     this.budgetItemsService.subject.subscribe({next: bItems=>{
       this.totalBudget = 0;

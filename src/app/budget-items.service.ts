@@ -16,11 +16,21 @@ export class BudgetItemsService {
   
   addBudgetItem(item: BudgetItem){
     this.budgetItems.push(item);
+    this.sortBudgetItems();
     this.subject.next(this.budgetItems);
   }
   
 
   getBudgetItems(){
+    this.subject.next(this.budgetItems);
+  }
+  sortBudgetItems(){
+    this.budgetItems.sort((a,b):number=>{
+      return (+b.date - +a.date)
+    })
+  }
+  deleteBudgetItem(index){
+    this.budgetItems.splice(index,1);
     this.subject.next(this.budgetItems);
   }
 }
