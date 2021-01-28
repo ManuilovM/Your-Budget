@@ -34,7 +34,8 @@ export class BudgetItemsService {
     this.subject.next(this.budgetItems);
   }
 
-  pushAllBudgetItems(token:string){
-
+  clearBudgetItems(){
+    this.budgetItems=[];
+    this.subject.next(this.budgetItems);
   }
 }

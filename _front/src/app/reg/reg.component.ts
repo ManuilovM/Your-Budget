@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../library/auth.service';
@@ -7,6 +7,7 @@ import { MatDialogRef} from '@angular/material/dialog';
 
 import { BudgetItemsService } from '../budget-items.service';
 import { AnswerAuth } from '../library/answer-auth';
+import { Router } from '@angular/router';
  
 
 @Component({
@@ -31,6 +32,7 @@ export class RegComponent implements OnInit {
     private _snackBar: MatSnackBar, 
     public dialogRef: MatDialogRef<RegComponent>,
     private budgetItemService: BudgetItemsService,
+    private router: Router,
     ) { }
 
   ngOnInit(): void {
@@ -48,7 +50,6 @@ export class RegComponent implements OnInit {
           });
 
           this.dialogRef.close();
-          console.log('registrered')
           this.authService.loginUser({email: regFormSubmit.email, password: regFormSubmit.password}).subscribe(
             (data:AnswerAuth)=>{
               if (data.success){
@@ -69,7 +70,7 @@ export class RegComponent implements OnInit {
   }
 
   showPrivacyPolicy(){
-    window.open( "http://localhost:4200/privacy");
+    window.open(this.router.serializeUrl(this.router.createUrlTree(["/privacy"])));
     return false;
   }
 

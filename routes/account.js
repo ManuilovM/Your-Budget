@@ -22,6 +22,8 @@ router.post('/reg', (req,res)=>{
 
 router.post('/login', User.loginUser);
 
+router.get('/logout', User.logOut);
+
 
 
 module.exports = router; 

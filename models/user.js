@@ -4,6 +4,7 @@ var passport       = require('passport');
 var LocalStrategy  = require('passport-local').Strategy;
 
 
+
 passport.use(new LocalStrategy({
   usernameField: 'email',
   passwordField: 'password'
@@ -73,4 +74,9 @@ module.exports.loginUser = function (req, res, next){
     }
   ) (req, res)
     
+}
+
+module.exports.logOut = function(req, res, next){
+    req.logout();
+    res.json({success: true, msg: "Выход выполнен"})
 }

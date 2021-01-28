@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AnswerAuth } from '../library/answer-auth';
 import { AuthService } from '../library/auth.service';
+import { LoginComponent } from '../login/login.component';
 import { RegComponent } from '../reg/reg.component';
 
 @Component({
@@ -12,9 +15,9 @@ export class TopComponent implements OnInit {
 
   isLogin = false;
 
-  name:string; //Имя юзера для отображения в нав баре
-
-  constructor(public dialog: MatDialog, public authService: AuthService, ) { }
+  name:string; 
+  
+  constructor(public dialog: MatDialog, private authService: AuthService,private _snackBar: MatSnackBar,  ) { }
 
   ngOnInit(): void {
     
@@ -28,6 +31,23 @@ export class TopComponent implements OnInit {
 
   showRegForm(){
     this.dialog.open(RegComponent,{width:'300px'});
+  }
+  
+  showLoginForm(){
+    this.dialog.open(LoginComponent);
+  }
+
+  logOut(){
+    this.authService.logOut().subscribe(
+      (data:AnswerAuth)=> {
+        if(data.success){
+          this._snackBar.open(data.msg, "Успешно!", {
+            duration: 2000,
+          })
+        }
+        else this._snackBar.open(data.msg, "Ошибка!");
+      }
+    )
   }
 
 }

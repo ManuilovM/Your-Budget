@@ -38,6 +38,7 @@ import { AuthService } from './library/auth.service';
 import { HostService } from './library/host.service';
 import { MainComponentComponent } from './main-component/main-component.component';
 import { PrivacyComponent } from './privacy/privacy.component';
+import { LoginComponent } from './login/login.component';
 
 
 
@@ -53,6 +54,7 @@ import { PrivacyComponent } from './privacy/privacy.component';
     RegComponent,
     MainComponentComponent,
     PrivacyComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,

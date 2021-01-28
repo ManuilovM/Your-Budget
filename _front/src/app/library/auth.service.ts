@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from "@angular/common/http";
-import { map } from "rxjs/operators";
-import { User } from './user';
 import { HostService } from './host.service';
 import { RegFormValues } from './reg-form-values';
 import { Observable, Subject } from 'rxjs';
 import { UserLoginForm } from './user-login-form';
 import { AnswerAuth } from './answer-auth';
-//import { JwtHelperService } from "@auth0/angular-jwt";
+import { BudgetItemsService } from '../budget-items.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +16,7 @@ export class AuthService {
    private userName: string;
    subject = new Subject<string>();
 
-  constructor(private http: HttpClient, private hostService: HostService) { }
+  constructor(private http: HttpClient, private hostService: HostService, private budgetItemsService: BudgetItemsService) { }
 
   registerUser(regFormValues:RegFormValues) {
     if (!regFormValues.privacyPolicy) return new Observable(subscriber=> {
@@ -42,7 +41,6 @@ export class AuthService {
       .post(this.hostService.getHost() + "account/login", user, { headers: headers }).subscribe(
         (data: AnswerAuth) =>{
           if(data.success) {
-            console.log('callback works')
             this.userName =  data.userName;
             localStorage.setItem("userName", data.userName);
             this.subject.next(this.userName);
@@ -51,17 +49,35 @@ export class AuthService {
         }
        ); 
     })
-
-
- 
-
-
   } 
+
+  logOut(){
+    let headers = new HttpHeaders();
+    headers.append("contentType", "application/json");
+    return new Observable(subscriber=>{
+
+      this.http
+      .get(this.hostService.getHost()+"account/logout", {headers:headers}).subscribe(
+        (data: AnswerAuth)=> {
+          if(data.success){
+            this.userName= null;
+            localStorage.removeItem('userName');
+            this.subject.next(this.userName);
+            this.budgetItemsService.clearBudgetItems();
+          }else console.log(data.msg);
+          subscriber.next(data);
+        }
+        
+      )
+
+    })
+
+  }
+
   getUserName(){
     this.userName =  localStorage.getItem("userName");
     this.subject.next(this.userName);
   }
-
 
 
 }
