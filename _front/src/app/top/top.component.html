@@ -1,0 +1,38 @@
+
+<div mat-dialog-content class="oun-title">
+  <span  style="text-align: center; width: 100%; position: absolute;">
+    <h1  class="total-badget" >твой бюджет</h1>
+  </span>
+  <span *ngIf = '!isLogin; else unset1' style="text-align: center;"> Вход <br> не выполнен</span>
+  <ng-template #unset1><span > {{name}}</span></ng-template>
+  
+  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+    <mat-icon *ngIf="!isLogin">login</mat-icon>
+    <mat-icon *ngIf="isLogin">logout</mat-icon>
+    <!-- <mat-icon *ngIf="isLogin">account_circle</mat-icon> -->
+  </button>
+  
+  <mat-menu #menu="matMenu">
+    <button *ngIf = 'isLogin; else unset' mat-menu-item>
+      <snpan >Выйти</snpan>
+    </button>
+    <ng-template #unset>
+      <button mat-menu-item >
+        <span >Войти</span>
+      </button>
+      <button mat-menu-item (click)="showRegForm()">
+        <span>Зарегестрироваться</span>
+      </button>
+    </ng-template>
+
+  </mat-menu>
+
+
+
+<!--   <span *ngIf="!isLogin" class="oun-input-icon">
+     <mat-icon  class="oun-input-icond"   >person_outline</mat-icon>
+     Вход</span>
+  <span  *ngIf="isLogin"class="oun-input-icon">
+    <mat-icon  class="oun-input-icond"  >how_to_reg</mat-icon>
+    Выход </span> -->
+</div>

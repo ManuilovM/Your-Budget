@@ -1,0 +1,32 @@
+<div class="container pading">
+    <h1>Форма регистрации</h1>
+    <form class="example-form" [formGroup]="regForm" (ngSubmit)="submit()">
+        <mat-form-field>
+            <input placeholder="имя" matInput type="text" formControlName="name">
+            <mat-error *ngIf="regForm.controls.name.invalid">Введите имя</mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+            <input placeholder="email" matInput type="email" formControlName="email">
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+            <input placeholder="password" matInput type="password" formControlName="password">
+            <mat-error *ngIf="regForm.controls.password.invalid">Введите пароль</mat-error>
+        </mat-form-field>
+        <br>
+        <mat-checkbox formControlName="privacyPolicy" class="example-margin">
+            Я соглашаюсь с <a href="http://localhost:4200/privacy" style="white-space:pre-line" (click)='showPrivacyPolicy()'>Политикой конфидециальности</a>
+        </mat-checkbox>
+        <br>
+        <mat-checkbox formControlName="isSaveTable" class="example-margin" >
+           <span  style="white-space:pre-line" > Сохранить текущие данные из таблицы</span> 
+        </mat-checkbox>
+        <br>
+        <button mat-raised-button color="primary" type="submit" [disabled]="regForm.invalid">Зарегистрироваться</button>
+
+    </form>
+    <span class="xbutton"> <button mat-icon-button mat-dialog-close>
+            <mat-icon>close</mat-icon>
+        </button></span>
+</div>

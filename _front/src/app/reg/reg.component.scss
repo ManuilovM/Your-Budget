@@ -1,0 +1,23 @@
+
+div{
+    position: relative;
+    h1{
+        margin-top: 7px;
+    }
+    form{
+        text-align: center;
+    }
+    button{
+        margin-top: 5px;
+    }
+    .xbutton{
+        position: absolute;
+        top: -18px;
+        right: -18px;
+        color: red;
+    }
+}
+.pading{
+    padding: 10px;
+    
+}
