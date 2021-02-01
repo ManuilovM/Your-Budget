@@ -21,7 +21,10 @@ export class BudgetItemFormComponent implements OnInit {
   filteredOptions: Observable<string[]>;
   categories: string[] =[] ;
 
-  constructor(private budgetItemsService: BudgetItemsService, private _snackBar: MatSnackBar ) {}
+  constructor(
+    private budgetItemsService: BudgetItemsService, 
+    private _snackBar: MatSnackBar 
+    ) {}
 
   ngOnInit() {
     this.filteredOptions = this.budgetForm.controls[
@@ -50,6 +53,8 @@ export class BudgetItemFormComponent implements OnInit {
     bItem.date.setHours(now.getHours());
     bItem.date.setMinutes(now.getMinutes());
     bItem.date.setSeconds(now.getSeconds());
+    bItem.itemID = this._generateItemID();
+
     this.budgetItemsService.addBudgetItem(bItem);
     this.shoCompleteMessage();
     this.budgetForm.controls.amount.reset();
@@ -63,6 +68,12 @@ export class BudgetItemFormComponent implements OnInit {
     });
   }
 
+
+  private _generateItemID():string{
+  
+    let id:string= Math.random()*Math.random()*1000000+"."+(+new Date()) ;
+    return id
+  }
 
   private _filterCategory(categoryArr: string[]) {
     let arrRes: string[] =[];

@@ -2,22 +2,12 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const path = require("path");
 const configdb = require("./config/db");
 const account = require ("./routes/account");
-const passport = require('passport');
-const cookieParser = require('cookie-parser');
-const session = require ('express-session');
+const budgetItems= require('./routes/budgetItems');
 
 
-/* 
-app.use(express.cookieParser());
-app.use(express.bodyParser());
-app.use(express.session({ secret: 'SECRET' }));
- 
-// Passport:
-app.use(passport.initialize());
-app.use(passport.session()); */
+
 
 
 
@@ -28,22 +18,12 @@ const port =3000;
 /* -------------------------------------------------------------------------- */
 /*                  // Подключение вспомогательных технологий                 */
 /* -------------------------------------------------------------------------- */
+const corsOptions = {
+  origin: 'http://localhost:4200'
+}
+app.use(cors(corsOptions));
 
-app.use(cors());
-//app.use('/account', bodyParser());
 app.use(bodyParser.json());
-
-
-app.use( cookieParser());
-app.use(session({ 
-  secret: configdb.secret,
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: true }
-}));
-
-app.use(passport.initialize());
-app.use(passport.session());
 
 /* -------------------------------------------------------------------------- */
 /*                          // Подключение к MongoDB                          */
@@ -67,6 +47,8 @@ mongoose.connect(configdb.db, {
 
 
 app.use('/account', account);
+//app.use('/budgetItems', mustAuthenticatedMw.mustAuthenticatedMw);
+app.use('/budgetItems', budgetItems );
 
 
 /* app.get('*', (req, res)=>{

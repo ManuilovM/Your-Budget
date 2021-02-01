@@ -3,4 +3,5 @@ export class BudgetItem {
     date: Date;
     category: string;
     description: string;
+    itemID: string;
 }

@@ -1,24 +1,8 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-var passport       = require('passport');
-var LocalStrategy  = require('passport-local').Strategy;
-
-
-
-passport.use(new LocalStrategy({
-  usernameField: 'email',
-  passwordField: 'password'
-}, function(username, password, done){
-  User.findOne({ email : username},function(err,user){
-    return err 
-      ? console.log(err)
-      : user
-        ? bcrypt.compareSync(password, user.password)  
-          ? done(null, user, { success: true, msg: "Вход выполнен", userName: user.name })
-          : done(null, false, { success: false, msg: 'Не верный пароль'})
-        : done(null, false, {  success: false, msg: 'Пользователь не найден' });
-  });
-}));
+const randomString  =require('../config/makeRandomString');
+const jwt = require("jsonwebtoken");
+const ts = require("../config/tokenSecrets");
 
 
 const UserSchema = mongoose.Schema({
@@ -36,6 +20,9 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    stringForRefreshToken:{
+      type:String
+    }
 })
 
 const User = module.exports = mongoose.model('User', UserSchema);
@@ -67,16 +54,25 @@ module.exports.registerUser = function(newUser, callback){
 };
 
 module.exports.loginUser = function (req, res, next){
-    
-    passport.authenticate('local',
-    function(err, user, info) {
-        return res.json(info);
-    }
-  ) (req, res)
-    
+    let login = req.body;
+    User.findOne({email: login.email}, function (err,user){
+      if(err) console.log(err)
+      else  if (user) { 
+        if(bcrypt.compareSync(login.password, user.password)) {
+          let stringForRefreshToken = randomString(20);
+          let accessToken = jwt.sign({id: user._id}, ts.access, {expiresIn:20});
+          let refreshToken = jwt.sign({stringForRefreshToken: stringForRefreshToken}, ts.refresh, {expiresIn: 60});
+          User.updateOne({email: login.email}, {stringForRefreshToken: stringForRefreshToken}, function (err, result){
+            if (err) console.log (err);
+            else res.json({success:true, msg: "Вход выполнен",userName: user.name, accessToken: accessToken, refreshToken: refreshToken});
+          });
+        }else res.json({success: false, msg: "Не верный пароль"})
+
+      } else res.json({success: false, msg: "Не верный email"})
+
+    })
 }
 
-module.exports.logOut = function(req, res, next){
-    req.logout();
-    res.json({success: true, msg: "Выход выполнен"})
+module.exports.logOut = function(userid, callback ){
+  User.updateOne({_id: userid}, {stringForRefreshToken: ""}, callback)
 }

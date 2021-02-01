@@ -26,7 +26,7 @@ export class AuthService {
       let headers = new HttpHeaders();
       headers.append("contentType", "application/json");
       return this.http
-        .post(this.hostService.getHost() + "account/reg", regFormValues, { headers: headers })
+        .post(this.hostService.getHost() + "account/reg", regFormValues, { headers: headers})
     }
   }
 
@@ -38,11 +38,13 @@ export class AuthService {
     return new Observable(subscriber=>{
 
       this.http
-      .post(this.hostService.getHost() + "account/login", user, { headers: headers }).subscribe(
+      .post(this.hostService.getHost() + "account/login", user, { headers: headers}).subscribe(
         (data: AnswerAuth) =>{
           if(data.success) {
-            this.userName =  data.userName;
+            this.userName =  data.userName; 
             localStorage.setItem("userName", data.userName);
+            localStorage.setItem("accessToken", data.accessToken);
+            localStorage.setItem("refreshToken", data.refreshToken);
             this.subject.next(this.userName);
           }
           subscriber.next(data);
@@ -54,14 +56,15 @@ export class AuthService {
   logOut(){
     let headers = new HttpHeaders();
     headers.append("contentType", "application/json");
+    let logout = {accessToken: localStorage.getItem("accessToken")}
     return new Observable(subscriber=>{
 
       this.http
-      .get(this.hostService.getHost()+"account/logout", {headers:headers}).subscribe(
+      .post(this.hostService.getHost()+"account/logout", logout ,{ headers: headers}).subscribe(
         (data: AnswerAuth)=> {
           if(data.success){
             this.userName= null;
-            localStorage.removeItem('userName');
+            localStorage.clear();
             this.subject.next(this.userName);
             this.budgetItemsService.clearBudgetItems();
           }else console.log(data.msg);
@@ -78,6 +81,10 @@ export class AuthService {
     this.userName =  localStorage.getItem("userName");
     this.subject.next(this.userName);
   }
+
+/*   isAuthenticated(){
+
+  } */
 
 
 }

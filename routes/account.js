@@ -1,6 +1,7 @@
 const express = require("express"); 
 const router  = express.Router();
 const User = require("../models/user");
+const jwt = require("jsonwebtoken");
 
 router.post('/reg', (req,res)=>{
     let regForm = req.body;
@@ -22,7 +23,13 @@ router.post('/reg', (req,res)=>{
 
 router.post('/login', User.loginUser);
 
-router.get('/logout', User.logOut);
+router.post('/logout', (req, res)=>{
+  let userid = jwt.decode(req.body.accessToken).id;
+  User.logOut(userid, function (err, result){
+    err ? console.log(err)
+    :res.json({success: true, msg: "Выход выполнен"})
+   })
+});
 
 
 
