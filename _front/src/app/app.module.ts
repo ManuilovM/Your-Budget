@@ -39,6 +39,7 @@ import { HostService } from './library/host.service';
 import { MainComponentComponent } from './main-component/main-component.component';
 import { PrivacyComponent } from './privacy/privacy.component';
 import { LoginComponent } from './login/login.component';
+import { BudgetItemsService } from './budget-items.service';
 
 
 
@@ -75,7 +76,7 @@ import { LoginComponent } from './login/login.component';
     HttpClientModule,
     MatCheckboxModule
   ],
-  providers: [AuthService,HostService],
+  providers: [AuthService, HostService, BudgetItemsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

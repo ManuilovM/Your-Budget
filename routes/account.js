@@ -4,6 +4,7 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 
 router.post('/reg', (req,res)=>{
+  try{
     let regForm = req.body;
     if (!regForm.privacyPolicy) res.json({success: false, msg: "Нет согласия с Политикой Конфидециальности"});
     let user = {};
@@ -19,18 +20,27 @@ router.post('/reg', (req,res)=>{
         }
         else res.json({success: true, msg: "Пользователь успешно зарегистрирован"})
       })
+  }catch(e){
+    console.log(e);
+    res.json({success:false, msg: "Не коректный запрос"})
+  }
 })
 
 router.post('/login', User.loginUser);
 
 router.post('/logout', (req, res)=>{
-  let userid = jwt.decode(req.body.accessToken).id;
-  User.logOut(userid, function (err, result){
-    err ? console.log(err)
-    :res.json({success: true, msg: "Выход выполнен"})
-   })
+  try { // на случай если не будет токена
+    let userid = jwt.decode(req.body.accessToken).id;
+    User.logOut(req, userid, function (err, result){
+      err ? console.log(err)
+      :res.json({success: true, msg: "Выход выполнен"})
+     })
+  }catch(e) {
+    console.log(e);
+    res.json({success:false, msg: "нет токена"})
+  }
 });
 
-
+router.post('/refreshTokens', User.refreshTokens);
 
 module.exports = router; 
