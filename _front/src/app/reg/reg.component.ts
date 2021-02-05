@@ -50,7 +50,7 @@ export class RegComponent implements OnInit {
           });
 
           this.dialogRef.close();
-          this.authService.loginUser({email: regFormSubmit.email, password: regFormSubmit.password}).subscribe(
+          this.authService.loginUser({email: regFormSubmit.email, password: regFormSubmit.password, isSaveTable: regFormSubmit.isSaveTable }).subscribe(
             (data:AnswerAuth)=>{
               if (data.success){
                 if(regFormSubmit.isSaveTable)  this.budgetItemService.pushAllBudgetItems();

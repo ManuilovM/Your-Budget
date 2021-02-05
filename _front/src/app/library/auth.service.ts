@@ -5,7 +5,8 @@ import { RegFormValues } from './reg-form-values';
 import { UserLoginForm } from './user-login-form';
 import { AnswerAuth } from './answer-auth';
 import { BudgetItem } from '../budget-item';
-import { Observable, Subject } from 'rxjs';
+import { EmptyError, Observable, Subject } from 'rxjs';
+import { EmailValidator } from '@angular/forms';
 
 
 
@@ -119,6 +120,17 @@ export class AuthService {
 
 
     })
+
+  }
+
+  forgotPass(email){
+    let body = {
+      email: email
+    }
+    let headers = new HttpHeaders();
+    headers.append("contentType", "application/json");
+
+    return this.http.post(this.hostService.getHost()+"account/forgotPass", body, { headers: headers })
 
   }
 

@@ -9,10 +9,19 @@
             <input placeholder="password" matInput type="password" formControlName="password">
             <mat-error *ngIf="loginForm.controls.password.invalid">Введите пароль</mat-error>
         </mat-form-field>
+        <br> 
+        <a href="" (click)="forgotPass()">Забыли пароль</a>
         <br>
+        <mat-checkbox formControlName="isSaveTable" class="example-margin" >
+            <span  style="white-space:pre-line" > Сохранить текущие данные из <br> таблицы (если они есть)</span> 
+         </mat-checkbox>
+         <br>
+
+         <br>
         <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Войти</button>
 
     </form>
+    
     <span class="xbutton"> <button mat-icon-button mat-dialog-close>
             <mat-icon>close</mat-icon>
         </button></span>

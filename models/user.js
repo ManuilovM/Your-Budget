@@ -3,8 +3,7 @@ const bcrypt = require("bcryptjs");
 const randomString = require('../config/makeRandomString');
 const jwt = require("jsonwebtoken");
 const ts = require("../config/tokenSecrets");
-const { session } = require("passport");
-const { Session } = require("express-session");
+const nodemailer = require ('nodemailer');
 
 
 const UserSchema = mongoose.Schema({
@@ -175,5 +174,19 @@ module.exports.refreshTokens = function (req, res) {
         console.log(e);
         res.json({ success: false, msg: "Не верный запрос" });
     }
+    
+}
+
+module.exports.forgotPass= function(req, res){
+    let email = req.body.email;
+    User.findOne({email:email}, function(err, user){
+        if(err) console.log(err)
+        else{
+            if(user){
+                let getString;
+
+            }else res.json({success:false, msg: "No user"});
+        }
+    })
     
 }
