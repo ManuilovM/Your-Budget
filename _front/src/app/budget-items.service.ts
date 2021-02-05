@@ -50,8 +50,9 @@ export class BudgetItemsService {
 
   private sortBudgetItems(){
     this.budgetItems.sort((a,b):number=>{
-      return (+b.date - +a.date)
+      return (+(new Date(b.date)) - +(new Date(a.date)))
     })
+    console.log( this.budgetItems)
 
   }
   deleteBudgetItem(index){
@@ -87,6 +88,7 @@ export class BudgetItemsService {
       (data:AnswerAuth)=>{
         if(data.success){
           this.budgetItems = data.budgetItems;
+          this.sortBudgetItems();
           this.subject.next(this.budgetItems);
         }
       }

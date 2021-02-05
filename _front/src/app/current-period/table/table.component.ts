@@ -28,6 +28,8 @@ export class TableComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngAfterViewInit() {
+    this.budgetItemsService.clearBudgetItems(false);
+    this.budgetItemsService.fetchBudgetItems();
     this.budgetItemsService.getBudgetItems();
 
     document.addEventListener("DOMContentLoaded", this._ready);

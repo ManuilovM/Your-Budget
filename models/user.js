@@ -81,8 +81,8 @@ module.exports.loginUser = function (req, res, next) {
                     session = JSON.stringify(session);
                    
 
-                    let accessToken = jwt.sign({ id: user._id }, ts.access, { expiresIn: 60 });
-                    let refreshToken = jwt.sign({ stringForRefreshToken: session }, ts.refresh, { expiresIn: 60 * 60 });
+                    let accessToken = jwt.sign({ id: user._id }, ts.access, { expiresIn: 60*60 });
+                    let refreshToken = jwt.sign({ stringForRefreshToken: session }, ts.refresh, { expiresIn: 60 * 60*(24*14+12)});
                     User.updateOne({ email: login.email }, { sessions: sessionsBD }, function (err, result) {
 
                         if (err) console.log(err);
@@ -148,8 +148,8 @@ module.exports.refreshTokens = function (req, res) {
                                         session.set(useragent, value);
                                         session = Array.from(session);
                                         session = JSON.stringify(session);
-                                        let accessToken = jwt.sign({ id: user._id }, ts.access, { expiresIn: 60 });
-                                        let refreshToken = jwt.sign({ stringForRefreshToken: session }, ts.refresh, { expiresIn: 60 * 60 });
+                                        let accessToken = jwt.sign({ id: user._id }, ts.access, { expiresIn: 60*60 });
+                                        let refreshToken = jwt.sign({ stringForRefreshToken: session }, ts.refresh, { expiresIn: 60 * 60*(24*14+12) });
                                         User.updateOne({ email: user.email }, { sessions: sessionsBD }, function (err, result) {
 
                                             if (err) console.log(err);
