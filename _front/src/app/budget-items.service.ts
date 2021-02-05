@@ -59,10 +59,38 @@ export class BudgetItemsService {
     this.budgetItems.splice(index,1);
     this.subject.next(this.budgetItems);
 
+    this.authService.sendDeleteItem(itemID).subscribe(
+      (data:AnswerAuth)=>{
+        if (data.msg=="logout"){ 
+          this.clearBudgetItems()
+        }
+      }
+    )
   }
 
-  clearBudgetItems(){
+  clearBudgetItems(isSubject = true){
     this.budgetItems=[];
-    this.subject.next(this.budgetItems);
+    if (isSubject) this.subject.next(this.budgetItems);
+  }
+
+  async pushAllBudgetItems(){
+    for ( let item of this.budgetItems){
+      await this.authService.sendAddItem(item).subscribe(
+        err=> console.log(err)
+      )
+    }
+    return true
+  }
+
+  fetchBudgetItems(){
+    this.authService.sendFetchBudgetItems().subscribe(
+      (data:AnswerAuth)=>{
+        if(data.success){
+          this.budgetItems = data.budgetItems;
+          this.subject.next(this.budgetItems);
+        }
+      }
+    )
   }
 }
+

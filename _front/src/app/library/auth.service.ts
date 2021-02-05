@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from "@angular/common/http";
 import { HostService } from './host.service';
 import { RegFormValues } from './reg-form-values';
-import { Observable, Subject } from 'rxjs';
 import { UserLoginForm } from './user-login-form';
 import { AnswerAuth } from './answer-auth';
-import { BudgetItemsService } from '../budget-items.service';
 import { BudgetItem } from '../budget-item';
+import { Observable, Subject } from 'rxjs';
+
 
 
 @Injectable({
@@ -86,81 +86,182 @@ export class AuthService {
     this.subject.next(this.userName);
   }
 
-  refreshTokens(bitem):void{
+  refreshTokens() {
     let tokens = {
       accessToken: localStorage.getItem("accessToken"),
       refreshToken: localStorage.getItem("refreshToken")
     }
     let headers = new HttpHeaders();
     headers.append("contentType", "application/json");
-    this.http
-        .post(this.hostService.getHost() + "account/refreshTokens", tokens, { headers: headers}).subscribe(
-          (data:AnswerAuth)=>{
+    return new Observable(subscriber => {
+      this.http
+        .post(this.hostService.getHost() + "account/refreshTokens", tokens, { headers: headers }).subscribe(
+          (data: AnswerAuth) => {
             if (data.success) {
               console.log("refresh");
-            localStorage.setItem("userName", data.userName);
-            localStorage.setItem("accessToken", data.accessToken);
-            localStorage.setItem("refreshToken", data.refreshToken);
-            this.getUserName();
-            this.sendAddItem(bitem).subscribe(
-              (data:AnswerAuth)=>{
-                  console.log(data.success + ": " + data.msg );
-              }
-            );
+              localStorage.setItem("userName", data.userName);
+              localStorage.setItem("accessToken", data.accessToken);
+              localStorage.setItem("refreshToken", data.refreshToken);
+              this.getUserName();
+
+              subscriber.next({ success: true, msg: "OK" });
+
             }
             else {
-              this.logOut().subscribe((data:AnswerAuth)=>{ 
+              this.logOut().subscribe((data: AnswerAuth) => {
                 window.location.reload()
               })
             };
           },
           err => console.log(err)
         )
+
+
+
+    })
+
   }
 
 
-/* -------------------------------------------------------------------------- */
-/*                        budgetItemsService ServerSide                       */
-/* -------------------------------------------------------------------------- */
+  /* -------------------------------------------------------------------------- */
+  /*                        budgetItemsService ServerSide                       */
+  /* -------------------------------------------------------------------------- */
 
-  sendAddItem(bitem: BudgetItem){
+  sendAddItem(bitem: BudgetItem) {
     let body = {
       accessToken: localStorage.getItem("accessToken"),
       bitem: bitem,
-  }
-  console.log(bitem)
+    }
+    console.log(bitem)
     let headers = new HttpHeaders();
     headers.append("contentType", "application/json");
-          //отправляем запрос без проверки выполнен ли вход, сервер разбется с этим лучше
-          return new Observable(subscriber=>{
-            this.http.post(this.hostService.getHost() + 'budgetItems/addItem', body, { headers: headers}).subscribe(
-              (data: AnswerAuth)=>{
-                if (data.success){
-                  console.log(data.success + ": " + data.msg );
-                }else{
-                  if(data.msg == "jwt expired") {// просрочен акссесс токен
-                    this.refreshTokens(bitem);
-                  }else {
-                    if( data.msg=="Нет токена") {//вход не выполнен
-                      subscriber.next({success:true, msg: "Не выполнен вход"})
-                    }else{ //другая ошибка - разлогиниваем
-                      console.log(data.success + ": " + data.msg );
-                      this.logOut().subscribe(
-                        (data:AnswerAuth)=>subscriber.next({success:false, msg: "logout"})
-                      )
+    //отправляем запрос без проверки выполнен ли вход, сервер разбется с этим лучше
+    return new Observable(subscriber => {
+      this.http.post(this.hostService.getHost() + 'budgetItems/addItem', body, { headers: headers }).subscribe(
+        (data: AnswerAuth) => {
+          if (data.success) {
+            console.log(data.success + ": " + data.msg);
+          } else {
+            if (data.msg == "jwt expired") {// просрочен акссесс токен
+              this.refreshTokens().subscribe(
+                (data: AnswerAuth) => {
+                  if (data.success) this.sendAddItem(bitem).subscribe(
+                    (data: AnswerAuth) => {
+                      console.log(data.success + ": " + data.msg);
+                    },
+                    err => {
+                      console.log(err);
                     }
-
-                  }
-                  
+                  );
                 }
-              },
-              err=>{
-                console.log(err);
+              )
+            } else {
+              if (data.msg == "Нет токена") {//вход не выполнен
+                subscriber.next({ success: true, msg: "Не выполнен вход" })
+              } else { //другая ошибка - разлогиниваем
+                console.log(data.success + ": " + data.msg);
+                this.logOut().subscribe(
+                  (data: AnswerAuth) => subscriber.next({ success: false, msg: "logout" })
+                )
               }
-            )
+            }
 
-          })
+          }
+        },
+        err => {
+          console.log(err);
+        }
+      )
+
+    })
+
+
+  }
+
+  sendDeleteItem(itemId) {
+    let body = {
+      accessToken: localStorage.getItem("accessToken"),
+      itemId: itemId,
+    }
+    let headers = new HttpHeaders();
+    headers.append("contentType", "application/json");
+
+    return new Observable(subscriber => {
+      this.http.post(this.hostService.getHost() + 'budgetItems/deleteItem', body, { headers: headers }).subscribe(
+        (data: AnswerAuth) => {
+          if (!data.success) {
+            if (data.msg === "jwt expired") {
+              this.refreshTokens().subscribe(
+                (data: AnswerAuth) => {
+                  if (data.success) {
+                    this.sendDeleteItem(itemId).subscribe(
+                      err => console.log(err)
+                    )
+                  }
+                }
+              )
+            } else {
+              if (data.msg == "Нет токена") {//вход не выполнен
+                subscriber.next({ success: true, msg: "Не выполнен вход" })
+              } else { //другая ошибка - разлогиниваем
+                console.log(data.success + ": " + data.msg);
+                this.logOut().subscribe(
+                  (data: AnswerAuth) => subscriber.next({ success: false, msg: "logout" })
+                )
+              }
+            }
+          }
+        },
+        err => {
+          console.log(err);
+        }
+      )
+    })
+  }
+
+
+  sendFetchBudgetItems(){
+    let body = {
+      accessToken: localStorage.getItem("accessToken"),
+    }
+    let headers = new HttpHeaders();
+    headers.append("contentType", "application/json");
+
+    return new Observable(subscriber => {
+      this.http.post(this.hostService.getHost() + 'budgetItems/fetchBudgetItems', body, { headers: headers }).subscribe(
+        (data: AnswerAuth)=>{
+          if(!data.success){
+            
+            if (data.msg === "jwt expired") {
+              this.refreshTokens().subscribe(
+                (data: AnswerAuth) => {
+                  if (data.success) {
+                    this.sendFetchBudgetItems().subscribe(
+                      (data:AnswerAuth)=>{
+                        if(data.success)  subscriber.next(data);
+                      },
+                      err => console.log(err)
+                    )
+                  }
+                }
+              )
+            } else {
+              if (data.msg == "Нет токена") {//вход не выполнен
+                subscriber.next({ success: false, msg: "Не выполнен вход" })
+              } else { //другая ошибка - разлогиниваем
+                console.log(data.success + ": " + data.msg);
+                this.logOut().subscribe(
+                  (data: AnswerAuth) => subscriber.next({ success: false, msg: "logout" })
+                )
+              }
+            }
           
+          }else{
+            subscriber.next(data);
+          }
+        }
+      )
+    })
 
   }
 

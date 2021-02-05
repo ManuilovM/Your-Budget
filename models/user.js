@@ -175,9 +175,5 @@ module.exports.refreshTokens = function (req, res) {
         console.log(e);
         res.json({ success: false, msg: "Не верный запрос" });
     }
-
-
-
-
-
+    
 }

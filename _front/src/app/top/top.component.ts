@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { BudgetItemsService } from '../budget-items.service';
 import { AnswerAuth } from '../library/answer-auth';
 import { AuthService } from '../library/auth.service';
 import { LoginComponent } from '../login/login.component';
@@ -17,7 +18,7 @@ export class TopComponent implements OnInit {
 
   name:string; 
   
-  constructor(public dialog: MatDialog, private authService: AuthService,private _snackBar: MatSnackBar,  ) { }
+  constructor(public dialog: MatDialog, private authService: AuthService,private _snackBar: MatSnackBar, private budgetItemsService: BudgetItemsService  ) { }
 
   ngOnInit(): void {
     
@@ -41,6 +42,7 @@ export class TopComponent implements OnInit {
     this.authService.logOut().subscribe(
       (data:AnswerAuth)=> {
         if(data.success){
+          this.budgetItemsService.clearBudgetItems();
           this._snackBar.open(data.msg, "Успешно!", {
             duration: 2000,
           })

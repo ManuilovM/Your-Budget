@@ -53,7 +53,7 @@ export class RegComponent implements OnInit {
           this.authService.loginUser({email: regFormSubmit.email, password: regFormSubmit.password}).subscribe(
             (data:AnswerAuth)=>{
               if (data.success){
-                //if(regFormSubmit.isSaveTable) this.budgetItemService.pushAllBudgetItems();
+                if(regFormSubmit.isSaveTable)  this.budgetItemService.pushAllBudgetItems();
               } else this._snackBar.open(data.msg, "Ошибка!");
             }
           )
