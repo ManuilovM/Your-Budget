@@ -1,8 +1,13 @@
 
 
 # лист toDo
-to-do-list
+to-do-list.txt
+#мой бюджет.xlsx
+"мой бюджет.xlsx"
 
 # config
 config/
+
+#node_modules
+node_modules/
 

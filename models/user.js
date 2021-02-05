@@ -5,6 +5,14 @@ const jwt = require("jsonwebtoken");
 const ts = require("../config/tokenSecrets");
 const nodemailer = require ('nodemailer');
 
+const transporter = nodemailer.createTransport({
+    service: 'yandex',
+    auth: {
+      user: 'youremail@gmail.com',
+      pass: 'yourpassword'
+    }
+  });
+
 
 const UserSchema = mongoose.Schema({
     name: {
@@ -184,6 +192,7 @@ module.exports.forgotPass= function(req, res){
         else{
             if(user){
                 let getString;
+
 
             }else res.json({success:false, msg: "No user"});
         }
