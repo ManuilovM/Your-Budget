@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit {
     let loginFormSubmit: UserLoginForm = this.loginForm.value;
     if(!loginFormSubmit.email) this._snackBar.open("Введите Email", "Ошибка!");
      else{
-      this.authService.forgotPass(loginFormSubmit.email).subscribe(
+      this.authService.forgetPass(loginFormSubmit.email).subscribe(
         (data:AnswerAuth)=>{
           if(data.success) this._snackBar.open("На Ваш Email сейчас прийдет письмо с сылкой для смены пароля. Пожалуйста перейдите по ней","Успешно!");
           else{

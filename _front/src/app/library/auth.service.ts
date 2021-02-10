@@ -123,14 +123,50 @@ export class AuthService {
 
   }
 
-  forgotPass(email){
+  forgetPass(email: String) {
     let body = {
       email: email
     }
     let headers = new HttpHeaders();
     headers.append("contentType", "application/json");
 
-    return this.http.post(this.hostService.getHost()+"account/forgotPass", body, { headers: headers })
+    return this.http.post(this.hostService.getHost() + "account/forgetPass", body, { headers: headers })
+
+  }
+
+  getForgetPass(accessToken: string) {
+    let body = {
+      accessToken: accessToken
+    }
+    let headers = new HttpHeaders();
+    headers.append("contentType", "application/json");
+    return new Observable(subscriber => {
+      this.http.post(this.hostService.getHost() + "account/getForgetPass", body, { headers: headers }).subscribe(
+        (data: AnswerAuth) => {
+          if (data.success) {
+            this.userName = data.userName;
+            localStorage.setItem("userName", data.userName);
+            localStorage.setItem("accessToken", data.accessToken);
+            localStorage.setItem("refreshToken", data.refreshToken);
+            localStorage.setItem("tempPass", data.tempPassToken);
+            this.getUserName();
+            subscriber.next({ success: true, msg: data.msg, data: data });
+          } else {
+            if (data.msg == "jwt expired") {
+              subscriber.next({ success: false, msg: "jwt expired" });
+            }
+          }
+        }
+      )
+    })
+
+  }
+
+  changePass(body){
+    let headers = new HttpHeaders();
+    headers.append("contentType", "application/json");
+
+    return this.http.post(this.hostService.getHost() + "account/changePass", body, { headers: headers })
 
   }
 
@@ -232,7 +268,7 @@ export class AuthService {
   }
 
 
-  sendFetchBudgetItems(){
+  sendFetchBudgetItems() {
     let body = {
       accessToken: localStorage.getItem("accessToken"),
     }
@@ -241,16 +277,16 @@ export class AuthService {
 
     return new Observable(subscriber => {
       this.http.post(this.hostService.getHost() + 'budgetItems/fetchBudgetItems', body, { headers: headers }).subscribe(
-        (data: AnswerAuth)=>{
-          if(!data.success){
-            
+        (data: AnswerAuth) => {
+          if (!data.success) {
+
             if (data.msg === "jwt expired") {
               this.refreshTokens().subscribe(
                 (data: AnswerAuth) => {
                   if (data.success) {
                     this.sendFetchBudgetItems().subscribe(
-                      (data:AnswerAuth)=>{
-                        if(data.success)  subscriber.next(data);
+                      (data: AnswerAuth) => {
+                        if (data.success) subscriber.next(data);
                       },
                       err => console.log(err)
                     )
@@ -267,8 +303,8 @@ export class AuthService {
                 )
               }
             }
-          
-          }else{
+
+          } else {
             subscriber.next(data);
           }
         }

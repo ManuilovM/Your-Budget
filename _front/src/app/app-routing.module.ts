@@ -5,7 +5,8 @@ import { PrivacyComponent } from './privacy/privacy.component';
 
 const routes: Routes = [
 { path: '', component: MainComponentComponent}, 
-{ path: 'privacy', component: PrivacyComponent}, 
+{ path: 'privacy', component: PrivacyComponent},
+{ path: 'forgetPass',  component: MainComponentComponent},
 ];
 
 @NgModule({

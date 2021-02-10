@@ -1,0 +1,22 @@
+<div class="container">
+    <h1>Смена пароля</h1>
+    <form class="example-form" [formGroup]="changePassForm" (ngSubmit)="submit()">
+        <mat-form-field *ngIf="!tempPass">
+            <input placeholder="old password" matInput type="password" formControlName="oldPass">
+            <mat-error *ngIf="changePassForm.controls.oldPass.invalid">Введите старый пароль</mat-error>
+        </mat-form-field>
+        <br> 
+        <mat-form-field>
+            <input placeholder="new password" matInput type="password" formControlName="newPass">
+            <mat-error *ngIf="changePassForm.controls.newPass.invalid">Введите новый пароль</mat-error>
+        </mat-form-field>
+        <br> 
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="changePassForm.invalid">Сменить пароль</button>
+
+    </form>
+    
+    <span class="xbutton" (click)="onClickXbutton()"> <button mat-icon-button mat-dialog-close>
+            <mat-icon>close</mat-icon>
+        </button></span>
+</div>

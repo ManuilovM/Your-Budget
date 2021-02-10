@@ -40,6 +40,8 @@ import { MainComponentComponent } from './main-component/main-component.componen
 import { PrivacyComponent } from './privacy/privacy.component';
 import { LoginComponent } from './login/login.component';
 import { BudgetItemsService } from './budget-items.service';
+import { ChangePassComponent } from './change-pass/change-pass.component';
+import { CustomizationComponent } from './customization/customization.component';
 
 
 
@@ -56,6 +58,8 @@ import { BudgetItemsService } from './budget-items.service';
     MainComponentComponent,
     PrivacyComponent,
     LoginComponent,
+    ChangePassComponent,
+    CustomizationComponent,
   ],
   imports: [
     BrowserModule,

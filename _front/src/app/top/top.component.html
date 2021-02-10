@@ -13,9 +13,14 @@
   </button>
   
   <mat-menu #menu="matMenu">
+
     <button *ngIf = 'isLogin; else unset' mat-menu-item (click)="logOut()">
       <snpan >Выйти</snpan>
     </button>
+    <button *ngIf = 'isLogin' mat-menu-item (click)="customization()">
+      <snpan >Настройки</snpan>
+    </button>
+    
     <ng-template #unset>
       <button mat-menu-item (click)="showLoginForm()" >
         <span >Войти</span>

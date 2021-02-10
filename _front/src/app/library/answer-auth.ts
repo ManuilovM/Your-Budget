@@ -7,4 +7,5 @@ export class AnswerAuth {
     accessToken?:string;
     refreshToken?: string;
     budgetItems?: BudgetItem[];
+    tempPassToken?: string;
 }

@@ -43,6 +43,10 @@ router.post('/logout', (req, res)=>{
 
 router.post('/refreshTokens', User.refreshTokens);
 
-router.post('/forgotPass', User.forgotPass);
+router.post('/forgetPass', User.forgetPass);
+
+router.post('/getForgetPass', User.getForgetPass);
+
+router.post("/changePass", User.changePass)
 
 module.exports = router; 
