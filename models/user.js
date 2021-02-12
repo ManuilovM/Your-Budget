@@ -6,6 +6,7 @@ const ts = require("../config/tokenSecrets");
 const nodemailer = require('nodemailer');
 const mail = require("../config/mail");
 const host = require("../config/host");
+const BItems =require("./BItems");
 
 
 
@@ -71,6 +72,7 @@ module.exports.loginUser = function (req, res, next) {
 
 
                     let useragent = req.get("User-Agent").replace(/\./gi, "-");
+                    useragent = useragent.replace(/\d/gi, "X");
                     let value = randomString(20);
                     let sessionsBD;
                     let session;
@@ -111,6 +113,7 @@ module.exports.logOut = function (req, userid, callback) {
         User.findById(userid, function (err, user) {
             let sessionsBD = user.sessions;
             let useragent = req.get("User-Agent").replace(/\./gi, "-");
+            useragent = useragent.replace(/\d/gi, "X");
             sessionsBD.set(useragent, "");
             User.updateOne({ _id: userid }, { sessions: sessionsBD }, callback)
         })
@@ -148,6 +151,7 @@ module.exports.refreshTokens = function (req, res) {
                                     let s = JSON.parse(decode.stringForRefreshToken);
                                     s = new Map(s);
                                     let useragent = req.get("User-Agent").replace(/\./gi, "-");
+                                    useragent = useragent.replace(/\d/gi, "X");
                                     if (!!s.get(useragent) && s.get(useragent) == user.sessions.get(useragent)) {
                                         let value = randomString(20);
                                         let sessionsBD = user.sessions;
@@ -252,6 +256,7 @@ module.exports.getForgetPass = function (req, res) {
                     else {
                         // login//
                         let useragent = req.get("User-Agent").replace(/\./gi, "-");
+                        useragent = useragent.replace(/\d/gi, "X");
                         let value = randomString(20);
                         let sessionsBD;
                         let session;
@@ -378,4 +383,32 @@ module.exports.changePass = function (req, res) {
         res.json({ success: false, msg: e.message })
     }
 
+}
+
+module.exports.deleteAkk=function(req, res){
+
+    let body = req.body;
+    try{
+        User.findById(jwt.decode(body.accessToken).id, function(err, user){
+            if(err) console.log(err);
+            else{
+                if(!user){
+                    res.json({success:false, msg: "Пользователь не найден"})
+                }else{
+                    if(bcrypt.compareSync(body.pass, user.password)){
+                        let id = user._id;
+                        User.findByIdAndDelete(id, function(err, doc){
+                            if(err) console.log(err);
+                            else BItems.dropCollectionById(id, res);
+                        })
+                        
+                    }else{
+                        res.json({success:false, msg: "Пароль не верный"})
+                    }
+                }
+            }
+        })
+    }catch(e){
+        console.log(e);
+    }
 }

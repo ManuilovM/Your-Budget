@@ -42,6 +42,7 @@ import { LoginComponent } from './login/login.component';
 import { BudgetItemsService } from './budget-items.service';
 import { ChangePassComponent } from './change-pass/change-pass.component';
 import { CustomizationComponent } from './customization/customization.component';
+import { DeleteAkkComponent } from './delete-akk/delete-akk.component';
 
 
 
@@ -60,6 +61,7 @@ import { CustomizationComponent } from './customization/customization.component'
     LoginComponent,
     ChangePassComponent,
     CustomizationComponent,
+    DeleteAkkComponent,
   ],
   imports: [
     BrowserModule,

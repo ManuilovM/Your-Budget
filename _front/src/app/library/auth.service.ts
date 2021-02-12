@@ -170,6 +170,25 @@ export class AuthService {
 
   }
 
+  deleteAkk(body){
+    let headers = new HttpHeaders();
+    headers.append("contentType", "application/json");
+    return new Observable(subscriber=>{
+      this.http.post(this.hostService.getHost() + "account/deleteAkk", body, { headers: headers }).subscribe(
+        (data:AnswerAuth)=>{
+          if(data.success){
+            localStorage.clear();
+            this.getUserName();
+            subscriber.next(data);
+          }
+          else{
+            subscriber.next(data);
+          }
+        }
+      )
+    })
+  }
+
 
   /* -------------------------------------------------------------------------- */
   /*                        budgetItemsService ServerSide                       */

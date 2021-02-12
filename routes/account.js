@@ -47,6 +47,8 @@ router.post('/forgetPass', User.forgetPass);
 
 router.post('/getForgetPass', User.getForgetPass);
 
-router.post("/changePass", User.changePass)
+router.post("/changePass", User.changePass);
+
+router.post("/deleteAkk", User.deleteAkk)
 
 module.exports = router; 

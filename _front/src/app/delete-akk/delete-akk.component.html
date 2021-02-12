@@ -1,0 +1,17 @@
+<div class="container">
+    <h1>Удалить аккаунт</h1>
+    <form class="example-form" [formGroup]="deleteAkkForm" (ngSubmit)="submit()">
+        <mat-form-field >
+            <input placeholder="password" matInput type="password" formControlName="oldPass">
+            <mat-error *ngIf="deleteAkkForm.controls.oldPass.invalid">Введите пароль</mat-error>
+        </mat-form-field>
+        <br> 
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="deleteAkkForm.invalid">Удалить аккаунт</button>
+
+    </form>
+    
+    <span class="xbutton"> <button mat-icon-button mat-dialog-close>
+            <mat-icon>close</mat-icon>
+        </button></span>
+</div>
