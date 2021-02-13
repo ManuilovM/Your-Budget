@@ -12,10 +12,15 @@ import {  ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { TopComponent } from './top/top.component';
 import { CurrentPeriodComponent } from './current-period/current-period.component';
-import { FullAnalitikComponent } from './full-analitik/full-analitik.component';
 import { BudgetItemFormComponent } from './current-period/budget-item-form/budget-item-form.component';
 import { TableComponent } from './current-period/table/table.component';
 import { RegComponent } from './reg/reg.component';
+import { MainComponentComponent } from './main-component/main-component.component';
+import { PrivacyComponent } from './privacy/privacy.component';
+import { LoginComponent } from './login/login.component';
+import { ChangePassComponent } from './change-pass/change-pass.component';
+import { CustomizationComponent } from './customization/customization.component';
+import { DeleteAkkComponent } from './delete-akk/delete-akk.component';
 
 /* ----------------------------- materialize.io ----------------------------- */
 
@@ -36,13 +41,9 @@ import {MatDialogModule} from '@angular/material/dialog';
 
 import { AuthService } from './library/auth.service';
 import { HostService } from './library/host.service';
-import { MainComponentComponent } from './main-component/main-component.component';
-import { PrivacyComponent } from './privacy/privacy.component';
-import { LoginComponent } from './login/login.component';
 import { BudgetItemsService } from './budget-items.service';
-import { ChangePassComponent } from './change-pass/change-pass.component';
-import { CustomizationComponent } from './customization/customization.component';
-import { DeleteAkkComponent } from './delete-akk/delete-akk.component';
+
+
 
 
 
@@ -52,7 +53,6 @@ import { DeleteAkkComponent } from './delete-akk/delete-akk.component';
     AppComponent,
     TopComponent,
     CurrentPeriodComponent,
-    FullAnalitikComponent,
     BudgetItemFormComponent,
     TableComponent,
     RegComponent,

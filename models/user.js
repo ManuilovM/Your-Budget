@@ -211,15 +211,13 @@ transporter.verify(function (error, success) {
 });
 
 module.exports.forgetPass = function (req, res) {
-    console.log("forgetPass")
-    console.log("forgetPass, email: " + req.body.email);
     let email = req.body.email;
     User.findOne({ email: email }, function (err, user) {
         if (err) console.log(err)
         else {
             if (user) {
                 let accessToken = jwt.sign({ accessToken: user._id }, ts.access, { expiresIn: 60*3 });//
-                let src = host.ang + "/forgetPass" + "?id=" + accessToken;
+                let src = host.ang + "/forgetPass" + "?id=" + accessToken; 
 
                 let mailOptions = {
                     from: mail.user,
@@ -230,7 +228,6 @@ module.exports.forgetPass = function (req, res) {
 
                 transporter.sendMail(mailOptions, function (error, info) {
                     if (error) {
-                        console.log("Ошибка при отправке");
                         console.log(error);
                     } else {
                         console.log('Email sent: ' + info.response);
@@ -343,8 +340,6 @@ module.exports.changePass = function (req, res) {
             if (body.oldPass) {
                 User.findById(jwt.decode(body.id).id, function (err, user) {
                     if(user){
-                        console.log( typeof(body.oldPass) + ":" + body.oldPass);
-                        console.log(typeof(user.password) + ":"+ user.password);
                         if (bcrypt.compareSync(body.oldPass, user.password)) {
 
                             bcrypt.genSalt(10, function (err, salt) {

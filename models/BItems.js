@@ -28,8 +28,7 @@ const BitemsSchema = mongoose.Schema({
 
 
 module.exports.addItem = function (req, res) {
-    console.log("additem:" + req.body.bitem.date);
-    console.log("additem: " + res.locals.id);
+
     const BI = mongoose.model(res.locals.id, BitemsSchema);
 
     BI.create(req.body.bitem, function (err, doc) {
@@ -63,7 +62,6 @@ module.exports.fetchBudgetItems = function (req, res) {
             res.json({ success: false, msg: err.message });
         } else {
             if (docs) {
-                console.log("Записи взяты");
                 res.json({ success: true, msg: "Записи взяты", budgetItems: docs })
             }
         }
