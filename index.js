@@ -13,8 +13,8 @@ const identify = require("./routes/identify_ Mw")
 
 
 const app = express();
-//const port = process.env.PORT||8080;
-const port =3000;
+const port = process.env.PORT||8080;
+//const port =3000;
 
 /* -------------------------------------------------------------------------- */
 /*                  // Подключение вспомогательных технологий                 */
@@ -52,9 +52,9 @@ app.use('/budgetItems', identify);
 app.use('/budgetItems', budgetItems );
 
 
-/* app.get('*', (req, res)=>{
+ app.get('*', (req, res)=>{
   res.sendFile(path.join(__dirname + "/public/index.html"));
-} ) */
+} ) 
 
 
 /* -------------------------------------------------------------------------- */

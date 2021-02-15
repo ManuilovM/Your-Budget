@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class HostService {
-  private host:string = 'http://localhost:3000/';
+  private host:string = '';
 
   constructor() { }
   getHost(){
