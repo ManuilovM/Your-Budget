@@ -224,7 +224,7 @@ function createAccessRefreshToken(req, user,) {
     session = JSON.stringify(session);
 
 
-    let accessToken = jwt.sign({ id: user._id }, ts.access, { expiresIn: 30 * 1});
+    let accessToken = jwt.sign({ id: user._id }, ts.access, { expiresIn: 60 * 60});
     let refreshToken = jwt.sign({ stringForRefreshToken: session }, ts.refresh, { expiresIn: 60 * 60 * (24 * 14 + 12) });
 
     return {accessToken:accessToken  , refreshToken:refreshToken, sessionsBD: sessionsBD }
@@ -246,7 +246,7 @@ module.exports.getForgetPass = function (req, res) {
                         let sessionsBD  = tokens.sessionsBD;
 
                         let tempPass = randomString(20);
-                        let tempPassToken = jwt.sign({ tempPass: tempPass }, ts.tempPass, { expiresIn: 30 * 1 });
+                        let tempPassToken = jwt.sign({ tempPass: tempPass }, ts.tempPass, { expiresIn: 60 * 15 });
                         User.updateOne({ email: user.email }, { sessions: sessionsBD, tempPass: tempPass }, function (err, result) {
 
                             if (err) console.log(err);
