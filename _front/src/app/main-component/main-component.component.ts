@@ -35,13 +35,10 @@ export class MainComponentComponent implements OnInit {
   }
 
   private viewChangePass(){
-    console.log(this.router.url)
     if(location.href.indexOf("forgetPass")!==-1){
-      console.log("top")
       this.route.queryParams.subscribe(
         (queryParam: any)=>{
           let accessToken= queryParam['id'];
-          console.log("accessToken: "+queryParam['id'])
           this.authService.getForgetPass(accessToken).subscribe(
             (data:AnswerAuth)=>{
               if(data.success){

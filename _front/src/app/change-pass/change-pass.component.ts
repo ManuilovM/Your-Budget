@@ -13,7 +13,7 @@ import { AuthService } from '../library/auth.service';
 })
 export class ChangePassComponent implements OnInit {
 
-  tempPass: string
+  tempPassToken: string
   changePassForm: FormGroup = new FormGroup({
     oldPass: new FormControl(null, this.oldPassValidator),
     newPass: new FormControl(null, Validators.required),
@@ -27,28 +27,28 @@ export class ChangePassComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this.tempPass = localStorage.getItem("tempPass");
+    this.tempPassToken = localStorage.getItem("tempPassToken");
   }
 
   submit(){
     let passForm: any = this.changePassForm.value;
-    if(this.tempPass){
+    if(this.tempPassToken){
       let body = {
-        tempPass: this.tempPass,
+        tempPassToken: this.tempPassToken,
         newPass: passForm.newPass,
-        id: localStorage.accessToken
+        accessToken: localStorage.accessToken
       };
       this.authService.changePass(body).subscribe(
         (data:AnswerAuth)=>{
           if(data.success){
-            localStorage.removeItem("tempPass");
+            localStorage.removeItem("tempPassToken");
             this._snackBar.open("Пароль успешно заменен", "Успешно!", {duration: 2000, });
             this.authService.getUserName();
             this.dialogRef.close();
             this.router.navigate(['/']);
           }else{
             if (data.msg == "jwt expired"){
-              localStorage.removeItem("tempPass");
+              localStorage.removeItem("tempPassToken");
               this._snackBar.open("Истек срок действительности временного пароля. После завершения текущей сессии повторите попытку.", "Ошибка"); 
               this.dialogRef.close();  
               this.router.navigate(['/']);
@@ -63,7 +63,7 @@ export class ChangePassComponent implements OnInit {
       let body={
         oldPass: passForm.oldPass,
         newPass: passForm.newPass,
-        id: localStorage.accessToken
+        accessToken: localStorage.accessToken
       }
       this.authService.changePass(body).subscribe(
         (data:AnswerAuth)=> {
@@ -91,7 +91,7 @@ export class ChangePassComponent implements OnInit {
   
   oldPassValidator(control: FormControl): {[s:string]:boolean}{
          
-    if(!this.tempPass && control.value===false){
+    if(!this.tempPassToken && control.value===false){
         return {"tempPas": true};
     }
     return null; 

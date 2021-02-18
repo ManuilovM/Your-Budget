@@ -1,7 +1,7 @@
 <div class="container">
     <h1>Смена пароля</h1>
     <form class="example-form" [formGroup]="changePassForm" (ngSubmit)="submit()">
-        <mat-form-field *ngIf="!tempPass">
+        <mat-form-field *ngIf="!tempPassToken">
             <input placeholder="old password" matInput type="password" formControlName="oldPass">
             <mat-error *ngIf="changePassForm.controls.oldPass.invalid">Введите старый пароль</mat-error>
         </mat-form-field>

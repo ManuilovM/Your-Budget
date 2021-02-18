@@ -6,8 +6,7 @@ const ts = require("../config/tokenSecrets");
 const nodemailer = require('nodemailer');
 const mail = require("../config/mail");
 const host = require("../config/host");
-const BItems =require("./BItems");
-
+const BItems = require("./BItems");
 
 
 
@@ -36,16 +35,6 @@ const UserSchema = mongoose.Schema({
 
 const User = module.exports = mongoose.model('User', UserSchema);
 
-/* module.exports.getUserByLogin = function(login, callback){
-    const query = {
-        login: login,
-    };
-    User.findOne(query, callback);
-};
-
-module.exports.getUserById = function(id, callback){
-    User.findById(id, callback);
-}; */
 
 module.exports.registerUser = function (newUser, callback) {
     bcrypt.genSalt(10, function (err, salt) {
@@ -64,34 +53,16 @@ module.exports.registerUser = function (newUser, callback) {
 
 module.exports.loginUser = function (req, res, next) {
     try {
-        let login = req.body;
-        User.findOne({ email: login.email }, function (err, user) {
+        let loginForm = req.body;
+        User.findOne({ email: loginForm.email }, function (err, user) {
             if (err) console.log(err)
             else if (user) {
-                if (bcrypt.compareSync(login.password, user.password)) {
-
-
-                    let useragent = req.get("User-Agent").replace(/\./gi, "-");
-                    useragent = useragent.replace(/\d/gi, "X");
-                    let value = randomString(20);
-                    let sessionsBD;
-                    let session;
-
-                    if (user.sessions) {
-                        sessionsBD = user.sessions;
-                        session = new Map;
-                    } else {
-                        sessionsBD = session = new Map;
-                    }
-                    session.set(useragent, value);
-                    sessionsBD.set(useragent, value);
-                    session = Array.from(session);
-                    session = JSON.stringify(session);
-
-
-                    let accessToken = jwt.sign({ id: user._id }, ts.access, { expiresIn: 60 * 60 });
-                    let refreshToken = jwt.sign({ stringForRefreshToken: session }, ts.refresh, { expiresIn: 60 * 60 * (24 * 14 + 12) });
-                    User.updateOne({ email: login.email }, { sessions: sessionsBD }, function (err, result) {
+                if (bcrypt.compareSync(loginForm.password, user.password)) {
+                    let tokens = createAccessRefreshToken(req, user);
+                    let accessToken = tokens.accessToken;
+                    let refreshToken = tokens.refreshToken;
+                    let sessionsBD  = tokens.sessionsBD;
+                    User.updateOne({ email: loginForm.email }, { sessions: sessionsBD }, function (err, result) {
 
                         if (err) console.log(err);
                         else res.json({ success: true, msg: "Вход выполнен", userName: user.name, accessToken: accessToken, refreshToken: refreshToken });
@@ -100,9 +71,7 @@ module.exports.loginUser = function (req, res, next) {
                 } else res.json({ success: false, msg: "Не верный пароль" })
 
             } else res.json({ success: false, msg: "Не верный email" })
-
         })
-
     } catch {
         res.json({ success: false, msg: "Не верный запрос" })
     }
@@ -114,7 +83,7 @@ module.exports.logOut = function (req, userid, callback) {
             let sessionsBD = user.sessions;
             let useragent = req.get("User-Agent").replace(/\./gi, "-");
             useragent = useragent.replace(/\d/gi, "X");
-            sessionsBD.set(useragent, "");
+            sessionsBD.set(useragent, null);
             User.updateOne({ _id: userid }, { sessions: sessionsBD }, callback)
         })
 
@@ -153,15 +122,11 @@ module.exports.refreshTokens = function (req, res) {
                                     let useragent = req.get("User-Agent").replace(/\./gi, "-");
                                     useragent = useragent.replace(/\d/gi, "X");
                                     if (!!s.get(useragent) && s.get(useragent) == user.sessions.get(useragent)) {
-                                        let value = randomString(20);
-                                        let sessionsBD = user.sessions;
-                                        sessionsBD.set(useragent, value);
-                                        let session = new Map;
-                                        session.set(useragent, value);
-                                        session = Array.from(session);
-                                        session = JSON.stringify(session);
-                                        let accessToken = jwt.sign({ id: user._id }, ts.access, { expiresIn: 60 * 60 });
-                                        let refreshToken = jwt.sign({ stringForRefreshToken: session }, ts.refresh, { expiresIn: 60 * 60 * (24 * 14 + 12) });
+                                        let tokens = createAccessRefreshToken(req,user);
+                                        let accessToken = tokens.accessToken;
+                                        let refreshToken = tokens.refreshToken;
+                                        let sessionsBD  = tokens.sessionsBD;
+                                        
                                         User.updateOne({ email: user.email }, { sessions: sessionsBD }, function (err, result) {
 
                                             if (err) console.log(err);
@@ -216,8 +181,8 @@ module.exports.forgetPass = function (req, res) {
         if (err) console.log(err)
         else {
             if (user) {
-                let accessToken = jwt.sign({ accessToken: user._id }, ts.access, { expiresIn: 60*3 });//
-                let src = host.ang + "/forgetPass" + "?id=" + accessToken; 
+                let accessToken = jwt.sign({ id: user._id }, ts.access, { expiresIn: 30 * 3 });//
+                let src = host.ang(req) + "/forgetPass" + "?id=" + accessToken;
 
                 let mailOptions = {
                     from: mail.user,
@@ -230,57 +195,63 @@ module.exports.forgetPass = function (req, res) {
                     if (error) {
                         console.log(error);
                     } else {
-                        console.log('Email sent: ' + info.response);
                         res.json({ success: true, msg: "Письмо отправлено" });
                     }
                 });
-
 
             } else res.json({ success: false, msg: "No user" });
         }
     })
 }
 
+function createAccessRefreshToken(req, user,) {
+
+    let useragent = req.get("User-Agent").replace(/\./gi, "-");
+    useragent = useragent.replace(/\d/gi, "X");
+    let value = randomString(20);
+    let sessionsBD;
+    let session;
+
+    if (user.sessions) {
+        sessionsBD = user.sessions;
+        session = new Map;
+    } else {
+        sessionsBD = session = new Map;
+    }
+    session.set(useragent, value);
+    sessionsBD.set(useragent, value);
+    session = Array.from(session);
+    session = JSON.stringify(session);
+
+
+    let accessToken = jwt.sign({ id: user._id }, ts.access, { expiresIn: 30 * 1});
+    let refreshToken = jwt.sign({ stringForRefreshToken: session }, ts.refresh, { expiresIn: 60 * 60 * (24 * 14 + 12) });
+
+    return {accessToken:accessToken  , refreshToken:refreshToken, sessionsBD: sessionsBD }
+}
+
 module.exports.getForgetPass = function (req, res) {
-    let token = req.body.accessToken;
+    let accessToken = req.body.accessToken;
 
     try {
-        jwt.verify(token, ts.access, function (err, decode) {
+        jwt.verify(accessToken, ts.access, function (err, decode) {
             if (err) throw err
             else {
-                User.findById(decode.accessToken, function (err, user) {
+                User.findById(decode.id, function (err, user) {
                     if (err) console.log(err);
                     else {
-                        // login//
-                        let useragent = req.get("User-Agent").replace(/\./gi, "-");
-                        useragent = useragent.replace(/\d/gi, "X");
-                        let value = randomString(20);
-                        let sessionsBD;
-                        let session;
+                        let tokens = createAccessRefreshToken(req,user);
+                        let accessToken = tokens.accessToken;
+                        let refreshToken = tokens.refreshToken;
+                        let sessionsBD  = tokens.sessionsBD;
 
-                        if (user.sessions) {
-                            sessionsBD = user.sessions;
-                            session = new Map;
-                        } else {
-                            sessionsBD = session = new Map;
-                        }
-                        session.set(useragent, value);
-                        sessionsBD.set(useragent, value);
-                        session = Array.from(session);
-                        session = JSON.stringify(session);
-
-
-                        let accessToken = jwt.sign({ id: user._id }, ts.access, { expiresIn: 60 * 60 });
-                        let refreshToken = jwt.sign({ stringForRefreshToken: session }, ts.refresh, { expiresIn: 60 * 60 * (24 * 14 + 12) });
-                        // Add tempPass
                         let tempPass = randomString(20);
-                        let tempPassToken = jwt.sign({ tempPass: tempPass }, ts.tempPass, { expiresIn: 60*15});
+                        let tempPassToken = jwt.sign({ tempPass: tempPass }, ts.tempPass, { expiresIn: 30 * 1 });
                         User.updateOne({ email: user.email }, { sessions: sessionsBD, tempPass: tempPass }, function (err, result) {
 
                             if (err) console.log(err);
                             else res.json({ success: true, msg: "Вход выполнен", userName: user.name, accessToken: accessToken, refreshToken: refreshToken, tempPassToken: tempPassToken });
                         });
-
                     }
                 })
 
@@ -297,13 +268,13 @@ module.exports.getForgetPass = function (req, res) {
 module.exports.changePass = function (req, res) {
     let body = req.body;
     try {
-        if (body.tempPass) {
-            jwt.verify(body.tempPass, ts.tempPass, function (err, decode) {
+        if (body.tempPassToken) {
+            jwt.verify(body.tempPassToken, ts.tempPass, function (err, decode) {
                 if (err) {
                     res.json({ success: false, msg: err.message });
                     console.log(err);
                 } else {
-                    User.findById(jwt.decode(body.id).id, function (err, user) {
+                    User.findById(jwt.decode(body.accessToken).id, function (err, user) {
                         if (err) console.log(err);
                         else {
                             if (!user) {
@@ -338,8 +309,8 @@ module.exports.changePass = function (req, res) {
             })
         } else {
             if (body.oldPass) {
-                User.findById(jwt.decode(body.id).id, function (err, user) {
-                    if(user){
+                User.findById(jwt.decode(body.accessToken).id, function (err, user) {
+                    if (user) {
                         if (bcrypt.compareSync(body.oldPass, user.password)) {
 
                             bcrypt.genSalt(10, function (err, salt) {
@@ -359,13 +330,13 @@ module.exports.changePass = function (req, res) {
 
                             });
 
-                            
+
 
                         } else {
                             res.json({ success: false, msg: "Старый пароль не верен" })
                         }
 
-                    }else res.json({ success: false, msg: "Пользователь не найден" })
+                    } else res.json({ success: false, msg: "Пользователь не найден" })
 
                 })
             } else {
@@ -380,30 +351,30 @@ module.exports.changePass = function (req, res) {
 
 }
 
-module.exports.deleteAkk=function(req, res){
+module.exports.deleteAkk = function (req, res) {
 
     let body = req.body;
-    try{
-        User.findById(jwt.decode(body.accessToken).id, function(err, user){
-            if(err) console.log(err);
-            else{
-                if(!user){
-                    res.json({success:false, msg: "Пользователь не найден"})
-                }else{
-                    if(bcrypt.compareSync(body.pass, user.password)){
+    try {
+        User.findById(jwt.decode(body.accessToken).id, function (err, user) {
+            if (err) console.log(err);
+            else {
+                if (!user) {
+                    res.json({ success: false, msg: "Пользователь не найден" })
+                } else {
+                    if (bcrypt.compareSync(body.pass, user.password)) {
                         let id = user._id;
-                        User.findByIdAndDelete(id, function(err, doc){
-                            if(err) console.log(err);
+                        User.findByIdAndDelete(id, function (err, doc) {
+                            if (err) console.log(err);
                             else BItems.dropCollectionById(id, res);
                         })
-                        
-                    }else{
-                        res.json({success:false, msg: "Пароль не верный"})
+
+                    } else {
+                        res.json({ success: false, msg: "Пароль не верный" })
                     }
                 }
             }
         })
-    }catch(e){
+    } catch (e) {
         console.log(e);
     }
 }

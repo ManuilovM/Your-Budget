@@ -52,7 +52,6 @@ export class BudgetItemsService {
     this.budgetItems.sort((a,b):number=>{
       return (+(new Date(b.date)) - +(new Date(a.date)))
     })
-    console.log( this.budgetItems)
 
   }
   deleteBudgetItem(index){

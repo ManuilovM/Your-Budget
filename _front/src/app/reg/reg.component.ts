@@ -16,8 +16,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./reg.component.scss']
 })
 export class RegComponent implements OnInit {
-
-
+  host= location.hostname;
+  hrefPolycy =  "/privacy";
 
   regForm: FormGroup = new FormGroup({
     name: new FormControl( null, Validators.required),

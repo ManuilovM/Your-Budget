@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import { AnswerAuth } from '../library/answer-auth';
 import { AuthService } from '../library/auth.service';
 
@@ -22,7 +21,6 @@ export class DeleteAkkComponent implements OnInit {
   constructor(
     private authService:AuthService,
     private _snackBar: MatSnackBar,
-    private router: Router,
     public dialogRefDel: MatDialogRef<DeleteAkkComponent>,
 
   ) { }

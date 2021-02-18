@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 
-
 const BitemsSchema = mongoose.Schema({
     amount: {
         type: Number,
@@ -48,7 +47,6 @@ module.exports.deleteItem = function (req, res) {
             console.log(err);
             res.json({ success: false, msg: err.message })
         } else {
-            console.log("Запись удалена из БД")
             res.json({ success: true, msg: "Запись удалена из БД" })
         }
     })
@@ -75,6 +73,4 @@ module.exports.dropCollectionById = function (id, res) {
     }catch(err){
         console.log(err);
     }
-    
-
 }

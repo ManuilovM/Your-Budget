@@ -42,6 +42,8 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { AuthService } from './library/auth.service';
 import { HostService } from './library/host.service';
 import { BudgetItemsService } from './budget-items.service';
+import { NotFoundComponent } from './not-found/not-found.component';
+
 
 
 
@@ -62,6 +64,7 @@ import { BudgetItemsService } from './budget-items.service';
     ChangePassComponent,
     CustomizationComponent,
     DeleteAkkComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,

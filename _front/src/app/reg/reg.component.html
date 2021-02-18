@@ -16,7 +16,7 @@
         </mat-form-field>
         <br>
         <mat-checkbox formControlName="privacyPolicy" class="example-margin">
-            Я соглашаюсь с <a href="http://localhost:4200/privacy" style="white-space:pre-line" (click)='showPrivacyPolicy()'>Политикой конфидециальности</a>
+            Я соглашаюсь с <a [href]="hrefPolycy" style="white-space:pre-line" (click)='showPrivacyPolicy()'>Политикой конфидециальности</a>
         </mat-checkbox>
         <br>
         <mat-checkbox formControlName="isSaveTable" class="example-margin" >
