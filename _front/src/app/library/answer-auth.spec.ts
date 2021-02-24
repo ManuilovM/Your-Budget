@@ -1,6 +1,6 @@
 import { AnswerAuth } from './answer-auth';
 
-describe('AnswerAuth', () => {
+xdescribe('AnswerAuth', () => {
   it('should create an instance', () => {
     expect(new AnswerAuth()).toBeTruthy();
   });

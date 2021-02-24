@@ -9,7 +9,6 @@
   <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
     <mat-icon *ngIf="!isLogin">login</mat-icon>
     <mat-icon *ngIf="isLogin">logout</mat-icon>
-    <!-- <mat-icon *ngIf="isLogin">account_circle</mat-icon> -->
   </button>
   
   <mat-menu #menu="matMenu">
@@ -33,11 +32,4 @@
   </mat-menu>
 
 
-
-<!--   <span *ngIf="!isLogin" class="oun-input-icon">
-     <mat-icon  class="oun-input-icond"   >person_outline</mat-icon>
-     Вход</span>
-  <span  *ngIf="isLogin"class="oun-input-icon">
-    <mat-icon  class="oun-input-icond"  >how_to_reg</mat-icon>
-    Выход </span> -->
 </div>

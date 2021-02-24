@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RegComponent } from './reg.component';
 
-describe('RegComponent', () => {
+xdescribe('RegComponent', () => {
   let component: RegComponent;
   let fixture: ComponentFixture<RegComponent>;
 
@@ -19,7 +19,7 @@ describe('RegComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CurrentPeriodComponent } from './current-period.component';
 
-describe('CurrentPeriodComponent', () => {
+xdescribe('CurrentPeriodComponent', () => {
   let component: CurrentPeriodComponent;
   let fixture: ComponentFixture<CurrentPeriodComponent>;
 

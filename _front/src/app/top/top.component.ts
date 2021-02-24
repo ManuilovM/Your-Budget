@@ -8,6 +8,7 @@ import { AuthService } from '../library/auth.service';
 import { LoginComponent } from '../login/login.component';
 import { RegComponent } from '../reg/reg.component';
 
+
 @Component({
   selector: 'app-top',
   templateUrl: './top.component.html',
