@@ -48,12 +48,7 @@ export class BudgetItemFormComponent implements OnInit {
 
   submit(){
     let bItem: any = this.budgetForm.value;
-    let now:Date = new Date();
-    bItem.date = new Date(bItem.date);
-    bItem.date.setHours(now.getHours());
-    bItem.date.setMinutes(now.getMinutes());
-    bItem.date.setSeconds(now.getSeconds());
-    bItem.itemID = this._generateItemID();
+
 
     this.budgetItemsService.addBudgetItem(bItem);
     this.shoCompleteMessage();
@@ -69,11 +64,6 @@ export class BudgetItemFormComponent implements OnInit {
   }
 
 
-  private _generateItemID():string{
-  
-    let id:string= Math.random()*Math.random()*1000000+"."+(+new Date()) ;
-    return id
-  }
 
   private _filterCategory(categoryArr: string[]) {
     let arrRes: string[] =[];

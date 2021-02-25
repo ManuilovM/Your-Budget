@@ -22,12 +22,19 @@ export class BudgetItemsService {
 
   
   
-  addBudgetItem(item: BudgetItem){
-    this.budgetItems.push(item);
+  addBudgetItem(bItem: any){
+    let now:Date = new Date();
+    bItem.date = new Date(bItem.date);
+    bItem.date.setHours(now.getHours());
+    bItem.date.setMinutes(now.getMinutes());
+    bItem.date.setSeconds(now.getSeconds());
+    bItem.itemID = this._generateItemID();
+
+    this.budgetItems.push(bItem);
     this.sortBudgetItems();
     this.subject.next(this.budgetItems);
 
-    this.authService.sendAddItem(item).subscribe(
+    this.authService.sendAddItem(bItem).subscribe(
       (data:AnswerAuth)=>{
         if (data.msg=="logout"){ 
           this.clearBudgetItems()
@@ -36,6 +43,12 @@ export class BudgetItemsService {
     );
 
   }
+  private _generateItemID():string{
+  
+    let id:string= Math.random()*Math.random()*1000000+"."+(+new Date()) ;
+    return id
+  }
+
 
 
 
