@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { BudgetItemsService } from '../budget-items.service';
-import { AnswerAuth } from '../library/answer-auth';
-import { AuthService } from '../library/auth.service';
-import { UserLoginForm } from '../library/user-login-form';
+import { UserLoginForm } from 'src/app/classes/user-login-form';
+import { AuthService } from 'src/app/services/auth.service';
+import { BudgetItemsService } from 'src/app/services/budget-items.service';
+import { AnswerAuth } from '../../classes/answer-auth';
+
 
 
 @Component({

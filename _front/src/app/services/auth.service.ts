@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from "@angular/common/http";
-import { HostService } from './host.service';
-import { RegFormValues } from './reg-form-values';
-import { UserLoginForm } from './user-login-form';
-import { AnswerAuth } from './answer-auth';
-import { BudgetItem } from '../budget-item';
+import { HostService } from '../services/host.service';
+import { RegFormValues } from '../classes/reg-form-values';
+import { UserLoginForm } from '../classes/user-login-form';
+import { AnswerAuth } from '../classes/answer-auth';
 import { Observable, Subject } from 'rxjs';
+import { BudgetItem } from '../classes/budget-item';
 
 
 

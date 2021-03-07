@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AppModule } from '../app.module';
+
 
 import { DeleteAkkComponent } from './delete-akk.component';
 

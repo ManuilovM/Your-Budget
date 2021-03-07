@@ -3,8 +3,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { AnswerAuth } from '../library/answer-auth';
-import { AuthService } from '../library/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { AnswerAuth } from '../../classes/answer-auth';
+
 
 @Component({
   selector: 'app-change-pass',

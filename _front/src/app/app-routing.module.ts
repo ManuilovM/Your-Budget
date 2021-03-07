@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { MainComponentComponent } from './main-component/main-component.component';
-import { NotFoundComponent } from './not-found/not-found.component';
-import { PrivacyComponent } from './privacy/privacy.component';
+import { MainComponentComponent } from './components/main-component/main-component.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+import { PrivacyComponent } from './components/privacy/privacy.component';
 
 const routes: Routes = [
 { path: '', component: MainComponentComponent}, 

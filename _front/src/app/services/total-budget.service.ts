@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { BudgetItem } from './budget-item';
+import { BudgetItem } from '../classes/budget-item';
+
 import {BudgetItemsService} from './budget-items.service';
 
 @Injectable({

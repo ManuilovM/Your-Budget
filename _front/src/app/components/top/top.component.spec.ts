@@ -12,9 +12,10 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TopComponent } from './top.component';
-import { AuthService } from '../library/auth.service';
-import { BudgetItemsService } from '../budget-items.service';
+
 import { HttpClientModule } from '@angular/common/http';
+import { AuthService } from 'src/app/services/auth.service';
+import { BudgetItemsService } from 'src/app/services/budget-items.service';
 
 
 /* -------------------------------------------------------------------------- */

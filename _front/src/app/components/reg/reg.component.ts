@@ -1,13 +1,13 @@
 import { Component, OnInit} from '@angular/core';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from '../library/auth.service';
-import { RegFormValues } from '../library/reg-form-values';
+import { RegFormValues } from '../../classes/reg-form-values';
 import { MatDialogRef} from '@angular/material/dialog';
 
-import { BudgetItemsService } from '../budget-items.service';
-import { AnswerAuth } from '../library/answer-auth';
+import { AnswerAuth } from '../../classes/answer-auth';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
+import { BudgetItemsService } from 'src/app/services/budget-items.service';
  
 
 @Component({

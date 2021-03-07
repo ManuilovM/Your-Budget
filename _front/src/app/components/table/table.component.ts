@@ -1,8 +1,8 @@
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
-import { BudgetItem } from 'src/app/budget-item';
-import { BudgetItemsService } from 'src/app/budget-items.service';
+import { BudgetItem } from 'src/app/classes/budget-item';
+import { BudgetItemsService } from 'src/app/services/budget-items.service';
 
 
 

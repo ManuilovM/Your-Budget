@@ -1,9 +1,10 @@
 
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import {BudgetItem} from '..//app/budget-item'; 
-import { AnswerAuth } from './library/answer-auth';
-import { AuthService } from './library/auth.service';
+import { AnswerAuth } from '../classes/answer-auth';
+import { BudgetItem } from '../classes/budget-item';
+import { AuthService } from './auth.service';
+
 
 
 

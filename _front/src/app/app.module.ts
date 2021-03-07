@@ -10,17 +10,18 @@ import {  ReactiveFormsModule } from '@angular/forms';
 /* ------------------------------- components ------------------------------- */
 
 import { AppComponent } from './app.component';
-import { TopComponent } from './top/top.component';
-import { CurrentPeriodComponent } from './current-period/current-period.component';
-import { BudgetItemFormComponent } from './current-period/budget-item-form/budget-item-form.component';
-import { TableComponent } from './current-period/table/table.component';
-import { RegComponent } from './reg/reg.component';
-import { MainComponentComponent } from './main-component/main-component.component';
-import { PrivacyComponent } from './privacy/privacy.component';
-import { LoginComponent } from './login/login.component';
-import { ChangePassComponent } from './change-pass/change-pass.component';
-import { CustomizationComponent } from './customization/customization.component';
-import { DeleteAkkComponent } from './delete-akk/delete-akk.component';
+import { TopComponent } from './components/top/top.component';
+import { CurrentPeriodComponent } from './components/current-period/current-period.component';
+import { BudgetItemFormComponent } from './components/budget-item-form/budget-item-form.component';
+import { TableComponent } from './components/table/table.component';
+import { RegComponent } from './components/reg/reg.component';
+import { MainComponentComponent } from './components/main-component/main-component.component';
+import { PrivacyComponent } from './components/privacy/privacy.component';
+import { LoginComponent } from './components/login/login.component';
+import { ChangePassComponent } from './components/change-pass/change-pass.component';
+import { CustomizationComponent } from './components/customization/customization.component';
+import { DeleteAkkComponent } from './components/delete-akk/delete-akk.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 /* ----------------------------- materialize.io ----------------------------- */
 
@@ -39,10 +40,11 @@ import {MatDialogModule} from '@angular/material/dialog';
 
 /* --------------------------- service and classes -------------------------- */
 
-import { AuthService } from './library/auth.service';
-import { HostService } from './library/host.service';
-import { BudgetItemsService } from './budget-items.service';
-import { NotFoundComponent } from './not-found/not-found.component';
+
+
+import { AuthService } from './services/auth.service';
+import { HostService } from './services/host.service';
+import { BudgetItemsService } from './services/budget-items.service';
 
 
 

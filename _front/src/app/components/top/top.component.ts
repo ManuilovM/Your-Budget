@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { BudgetItemsService } from '../budget-items.service';
 import { CustomizationComponent } from '../customization/customization.component';
-import { AnswerAuth } from '../library/answer-auth';
-import { AuthService } from '../library/auth.service';
+import { AnswerAuth } from '../../classes/answer-auth';
 import { LoginComponent } from '../login/login.component';
 import { RegComponent } from '../reg/reg.component';
+import { AuthService } from 'src/app/services/auth.service';
+import { BudgetItemsService } from 'src/app/services/budget-items.service';
 
 
 @Component({

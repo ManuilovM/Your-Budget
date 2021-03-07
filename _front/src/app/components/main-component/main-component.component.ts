@@ -3,9 +3,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChangePassComponent } from '../change-pass/change-pass.component';
-import { AnswerAuth } from '../library/answer-auth';
-import { AuthService } from '../library/auth.service';
-import { TotalBudgetService } from '../total-budget.service';
+import { AnswerAuth } from '../../classes/answer-auth';
+import { TotalBudgetService } from 'src/app/services/total-budget.service';
+import { AuthService } from 'src/app/services/auth.service';
+
 
 
 @Component({
