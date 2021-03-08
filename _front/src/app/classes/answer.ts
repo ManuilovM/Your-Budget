@@ -1,7 +1,7 @@
 import { BudgetItem } from "./budget-item";
 
 
-export class AnswerAuth {
+export class Answer {
     success: boolean;
     msg: string;
     userName?: string;

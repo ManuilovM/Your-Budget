@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/services/auth.service';
-import { AnswerAuth } from '../../classes/answer-auth';
+import {  Answer } from '../../classes/answer';
 
 
 @Component({
@@ -35,7 +35,7 @@ export class DeleteAkkComponent implements OnInit {
       accessToken: localStorage.getItem("accessToken")
     }
     this.authService.deleteAkk(body).subscribe(
-      (data: AnswerAuth)=>{
+      (data: Answer)=>{
         if(data.success){
           this._snackBar.open(data.msg, "Успешно", {duration:2000});
           this.dialogRefDel.close();

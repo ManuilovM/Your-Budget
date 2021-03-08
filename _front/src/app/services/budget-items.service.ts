@@ -1,7 +1,7 @@
 
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { AnswerAuth } from '../classes/answer-auth';
+import { Answer } from '../classes/answer';
 import { BudgetItem } from '../classes/budget-item';
 import { AuthService } from './auth.service';
 
@@ -36,7 +36,7 @@ export class BudgetItemsService {
     this.subject.next(this.budgetItems);
 
     this.authService.sendAddItem(bItem).subscribe(
-      (data:AnswerAuth)=>{
+      (data:Answer)=>{
         if (data.msg=="logout"){ 
           this.clearBudgetItems()
         }
@@ -74,7 +74,7 @@ export class BudgetItemsService {
     this.subject.next(this.budgetItems);
 
     this.authService.sendDeleteItem(itemID).subscribe(
-      (data:AnswerAuth)=>{
+      (data:Answer)=>{
         if (data.msg=="logout"){ 
           this.clearBudgetItems()
         }
@@ -98,7 +98,7 @@ export class BudgetItemsService {
 
   fetchBudgetItems(){
     this.authService.sendFetchBudgetItems().subscribe(
-      (data:AnswerAuth)=>{
+      (data:Answer)=>{
         if(data.success){
           this.budgetItems = data.budgetItems;
           this.sortBudgetItems();

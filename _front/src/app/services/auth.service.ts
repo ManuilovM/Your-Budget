@@ -3,7 +3,7 @@ import { HttpHeaders, HttpClient } from "@angular/common/http";
 import { HostService } from '../services/host.service';
 import { RegFormValues } from '../classes/reg-form-values';
 import { UserLoginForm } from '../classes/user-login-form';
-import { AnswerAuth } from '../classes/answer-auth';
+import { Answer} from '../classes/answer';
 import { Observable, Subject } from 'rxjs';
 import { BudgetItem } from '../classes/budget-item';
 
@@ -41,7 +41,7 @@ export class AuthService {
 
       this.http
         .post(this.hostService.getHost() + "account/login", user, { headers: headers }).subscribe(
-          (data: AnswerAuth) => {
+          (data: Answer) => {
             if (data.success) {
               this.userName = data.userName;
               localStorage.setItem("userName", data.userName);
@@ -63,7 +63,7 @@ export class AuthService {
 
       this.http
         .post(this.hostService.getHost() + "account/logout", logout, { headers: headers }).subscribe(
-          (data: AnswerAuth) => {
+          (data: Answer) => {
             if (data.success) {
               this.userName = null;
               localStorage.clear();
@@ -97,7 +97,7 @@ export class AuthService {
     return new Observable(subscriber => {
       this.http
         .post(this.hostService.getHost() + "account/refreshTokens", tokens, { headers: headers }).subscribe(
-          (data: AnswerAuth) => {
+          (data: Answer) => {
             if (data.success) {
               localStorage.setItem("userName", data.userName);
               localStorage.setItem("accessToken", data.accessToken);
@@ -108,7 +108,7 @@ export class AuthService {
 
             }
             else {
-              this.logOut().subscribe((data: AnswerAuth) => {
+              this.logOut().subscribe((data: Answer) => {
                 window.location.reload()
               })
             };
@@ -141,7 +141,7 @@ export class AuthService {
     headers.append("contentType", "application/json");
     return new Observable(subscriber => {
       this.http.post(this.hostService.getHost() + "account/getForgetPass", body, { headers: headers }).subscribe(
-        (data: AnswerAuth) => {
+        (data: Answer) => {
           if (data.success) {
             this.userName = data.userName;
             localStorage.setItem("userName", data.userName);
@@ -174,7 +174,7 @@ export class AuthService {
     headers.append("contentType", "application/json");
     return new Observable(subscriber=>{
       this.http.post(this.hostService.getHost() + "account/deleteAkk", body, { headers: headers }).subscribe(
-        (data:AnswerAuth)=>{
+        (data:Answer)=>{
           if(data.success){
             localStorage.clear();
             this.getUserName();
@@ -190,7 +190,7 @@ export class AuthService {
 
 
   /* -------------------------------------------------------------------------- */
-  /*                        budgetItemsService ServerSide                       */
+  /*                        budgetItemsService sending part                     */
   /* -------------------------------------------------------------------------- */
 
   sendAddItem(bitem: BudgetItem) {
@@ -202,11 +202,11 @@ export class AuthService {
     headers.append("contentType", "application/json");
     return new Observable(subscriber => {
       this.http.post(this.hostService.getHost() + 'budgetItems/addItem', body, { headers: headers }).subscribe(
-        (data: AnswerAuth) => {
+        (data: Answer) => {
           if (!data.success){
             if (data.msg == "jwt expired") {
               this.refreshTokens().subscribe(
-                (data: AnswerAuth) => {
+                (data: Answer) => {
                   if (data.success) this.sendAddItem(bitem).subscribe(
                     err => {
                       console.log(err);
@@ -219,7 +219,7 @@ export class AuthService {
                 subscriber.next({ success: true, msg: "Не выполнен вход" })
               } else { 
                 this.logOut().subscribe(
-                  (data: AnswerAuth) => subscriber.next({ success: false, msg: "logout" })
+                  (data: Answer) => subscriber.next({ success: false, msg: "logout" })
                 )
               }
             }
@@ -247,11 +247,11 @@ export class AuthService {
 
     return new Observable(subscriber => {
       this.http.post(this.hostService.getHost() + 'budgetItems/deleteItem', body, { headers: headers }).subscribe(
-        (data: AnswerAuth) => {
+        (data: Answer) => {
           if (!data.success) {
             if (data.msg === "jwt expired") {
               this.refreshTokens().subscribe(
-                (data: AnswerAuth) => {
+                (data: Answer) => {
                   if (data.success) {
                     this.sendDeleteItem(itemId).subscribe(
                       err => console.log(err)
@@ -264,7 +264,7 @@ export class AuthService {
                 subscriber.next({ success: true, msg: "Не выполнен вход" })
               } else { 
                 this.logOut().subscribe(
-                  (data: AnswerAuth) => subscriber.next({ success: false, msg: "logout" })
+                  (data: Answer) => subscriber.next({ success: false, msg: "logout" })
                 )
               }
             }
@@ -287,15 +287,15 @@ export class AuthService {
 
     return new Observable(subscriber => {
       this.http.post(this.hostService.getHost() + 'budgetItems/fetchBudgetItems', body, { headers: headers }).subscribe(
-        (data: AnswerAuth) => {
+        (data: Answer) => {
           if (!data.success) {
 
             if (data.msg === "jwt expired") {
               this.refreshTokens().subscribe(
-                (data: AnswerAuth) => {
+                (data: Answer) => {
                   if (data.success) {
                     this.sendFetchBudgetItems().subscribe(
-                      (data: AnswerAuth) => {
+                      (data: Answer) => {
                         if (data.success) subscriber.next(data);
                       },
                       err => console.log(err)
@@ -308,7 +308,7 @@ export class AuthService {
                 subscriber.next({ success: false, msg: "Не выполнен вход" })
               } else { 
                 this.logOut().subscribe(
-                  (data: AnswerAuth) => subscriber.next({ success: false, msg: "logout" })
+                  (data: Answer) => subscriber.next({ success: false, msg: "logout" })
                 )
               }
             }

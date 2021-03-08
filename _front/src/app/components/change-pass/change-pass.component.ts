@@ -4,7 +4,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import { AnswerAuth } from '../../classes/answer-auth';
+import {  Answer } from '../../classes/answer';
 
 
 @Component({
@@ -40,7 +40,7 @@ export class ChangePassComponent implements OnInit {
         accessToken: localStorage.accessToken
       };
       this.authService.changePass(body).subscribe(
-        (data:AnswerAuth)=>{
+        (data:Answer)=>{
           if(data.success){
             localStorage.removeItem("tempPassToken");
             this._snackBar.open("Пароль успешно заменен", "Успешно!", {duration: 2000, });
@@ -67,7 +67,7 @@ export class ChangePassComponent implements OnInit {
         accessToken: localStorage.accessToken
       }
       this.authService.changePass(body).subscribe(
-        (data:AnswerAuth)=> {
+        (data:Answer)=> {
           if(data.success){
             this.dialogRef.close();
             this.router.navigate(['/']);

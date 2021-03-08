@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChangePassComponent } from '../change-pass/change-pass.component';
-import { AnswerAuth } from '../../classes/answer-auth';
+import {  Answer } from '../../classes/answer';
 import { TotalBudgetService } from 'src/app/services/total-budget.service';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -41,7 +41,7 @@ export class MainComponentComponent implements OnInit {
         (queryParam: any)=>{
           let accessToken= queryParam['id'];
           this.authService.getForgetPass(accessToken).subscribe(
-            (data:AnswerAuth)=>{
+            (data:Answer)=>{
               if(data.success){
                 this.dialog.open(ChangePassComponent);
               }else{

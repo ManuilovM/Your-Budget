@@ -1959,7 +1959,7 @@ class AuthService {
         });
     }
     /* -------------------------------------------------------------------------- */
-    /*                        budgetItemsService ServerSide                       */
+    /*                        budgetItemsService sending part                     */
     /* -------------------------------------------------------------------------- */
     sendAddItem(bitem) {
         let body = {

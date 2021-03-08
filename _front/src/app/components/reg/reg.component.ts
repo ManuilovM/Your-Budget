@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { RegFormValues } from '../../classes/reg-form-values';
 import { MatDialogRef} from '@angular/material/dialog';
 
-import { AnswerAuth } from '../../classes/answer-auth';
+import { Answer } from '../../classes/answer';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { BudgetItemsService } from 'src/app/services/budget-items.service';
@@ -42,7 +42,7 @@ export class RegComponent implements OnInit {
   submit(){
     let regFormSubmit:RegFormValues= this.regForm.value;
     this.authService.registerUser(regFormSubmit).subscribe(
-      (data:AnswerAuth)=>{ 
+      (data:Answer)=>{ 
         if(data.success){ 
           
           this._snackBar.open(data.msg, "Успешно!", {
@@ -51,7 +51,7 @@ export class RegComponent implements OnInit {
 
           this.dialogRef.close();
           this.authService.loginUser({email: regFormSubmit.email, password: regFormSubmit.password, isSaveTable: regFormSubmit.isSaveTable }).subscribe(
-            (data:AnswerAuth)=>{
+            (data:Answer)=>{
               if (data.success){
                 if(regFormSubmit.isSaveTable)  this.budgetItemService.pushAllBudgetItems();
               } else this._snackBar.open(data.msg, "Ошибка!");

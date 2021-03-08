@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CustomizationComponent } from '../customization/customization.component';
-import { AnswerAuth } from '../../classes/answer-auth';
+import {  Answer } from '../../classes/answer';
 import { LoginComponent } from '../login/login.component';
 import { RegComponent } from '../reg/reg.component';
 import { AuthService } from 'src/app/services/auth.service';
@@ -47,7 +47,7 @@ export class TopComponent implements OnInit {
 
   logOut(){
     this.authService.logOut().subscribe(
-      (data:AnswerAuth)=> {
+      (data:Answer)=> {
         if(data.success){
           this.budgetItemsService.clearBudgetItems();
           this._snackBar.open(data.msg, "Успешно!", {

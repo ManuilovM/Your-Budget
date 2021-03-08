@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserLoginForm } from 'src/app/classes/user-login-form';
 import { AuthService } from 'src/app/services/auth.service';
 import { BudgetItemsService } from 'src/app/services/budget-items.service';
-import { AnswerAuth } from '../../classes/answer-auth';
+import {  Answer } from '../../classes/answer';
 
 
 
@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
   submit() {
     let loginFormSubmit: UserLoginForm = this.loginForm.value;
     this.authService.loginUser(loginFormSubmit).subscribe(
-      (data: AnswerAuth) => {
+      (data: Answer) => {
         if (data.success) {
           this.dialogRef.close();
           this._snackBar.open(data.msg, "Успешно!", {
@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
      else{
        if(!loginFormSubmit.isSaveTable) this.budgetItemsService.clearBudgetItems();
       this.authService.forgetPass(loginFormSubmit.email).subscribe(
-        (data:AnswerAuth)=>{
+        (data:Answer)=>{
           if(data.success) this._snackBar.open("На Ваш Email сейчас прийдет письмо с сылкой для смены пароля. Пожалуйста перейдите по ней","Успешно!");
           else{
             if(data.msg == "No user") this._snackBar.open("Пользователь не найден", "Ошибка!");
