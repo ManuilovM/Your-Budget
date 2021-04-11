@@ -10,27 +10,24 @@ import { BudgetItem } from '../classes/budget-item';
 
 
 
+
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService { //  IT IS NOT AUTHSERVISE ANYMORE
 
   private userName: string;
   subject = new Subject<string>();
 
   constructor(private http: HttpClient, private hostService: HostService,) { }
 
-  registerUser(regFormValues: RegFormValues) {
-    if (!regFormValues.privacyPolicy) return new Observable(subscriber => {
-      subscriber.next(JSON.stringify({ success: false, msg: "Нет согласия с Политикой Конфидециальности" }));
-    });
-    else {
+  sendRegisterForm(regFormValues: RegFormValues) {
       let headers = new HttpHeaders();
       headers.append("contentType", "application/json");
       return this.http
         .post(this.hostService.getHost() + "account/reg", regFormValues, { headers: headers })
-    }
   }
+  
 
 
   loginUser(user: UserLoginForm) {
@@ -50,6 +47,9 @@ export class AuthService {
               this.subject.next(this.userName);
             }
             subscriber.next(data);
+          },
+          err =>{
+            console.log(err);
           }
         );
     })
@@ -64,25 +64,16 @@ export class AuthService {
       this.http
         .post(this.hostService.getHost() + "account/logout", logout, { headers: headers }).subscribe(
           (data: Answer) => {
-            if (data.success) {
-              this.userName = null;
               localStorage.clear();
-              this.subject.next(this.userName);
-            } else {
-
-              localStorage.clear();
-              this.getUserName();
-            }
+              this.releaseUserName();
             subscriber.next(data);
           }
-
         )
-
     })
 
   }
 
-  public getUserName() {
+  public releaseUserName() {
     this.userName = localStorage.getItem("userName");
     this.subject.next(this.userName);
   }
@@ -102,7 +93,7 @@ export class AuthService {
               localStorage.setItem("userName", data.userName);
               localStorage.setItem("accessToken", data.accessToken);
               localStorage.setItem("refreshToken", data.refreshToken);
-              this.getUserName();
+              this.releaseUserName();
 
               subscriber.next({ success: true, msg: "OK" });
 
@@ -122,15 +113,13 @@ export class AuthService {
 
   }
 
-  forgetPass(email: String) {
+  forgetPass(email: String) { // sendRequestRecoveryForgotenPassword
     let body = {
       email: email
     }
     let headers = new HttpHeaders();
     headers.append("contentType", "application/json");
-
     return this.http.post(this.hostService.getHost() + "account/forgetPass", body, { headers: headers })
-
   }
 
   getForgetPass(accessToken: string) {
@@ -148,7 +137,7 @@ export class AuthService {
             localStorage.setItem("accessToken", data.accessToken);
             localStorage.setItem("refreshToken", data.refreshToken);
             localStorage.setItem("tempPassToken", data.tempPassToken);
-            this.getUserName();
+            this.releaseUserName();
             subscriber.next({ success: true, msg: data.msg, data: data });
           } else {
             if (data.msg == "jwt expired") {
@@ -177,7 +166,7 @@ export class AuthService {
         (data:Answer)=>{
           if(data.success){
             localStorage.clear();
-            this.getUserName();
+            this.releaseUserName();
             subscriber.next(data);
           }
           else{

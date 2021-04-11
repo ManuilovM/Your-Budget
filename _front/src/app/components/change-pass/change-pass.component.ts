@@ -44,7 +44,8 @@ export class ChangePassComponent implements OnInit {
           if(data.success){
             localStorage.removeItem("tempPassToken");
             this._snackBar.open("Пароль успешно заменен", "Успешно!", {duration: 2000, });
-            this.authService.getUserName();
+            this.authService.releaseUserName(); // Why???
+            
             this.dialogRef.close();
             this.router.navigate(['/']);
           }else{
@@ -53,7 +54,7 @@ export class ChangePassComponent implements OnInit {
               this._snackBar.open("Истек срок действительности временного пароля. После завершения текущей сессии повторите попытку.", "Ошибка"); 
               this.dialogRef.close();  
               this.router.navigate(['/']);
-              this.authService.getUserName();
+              this.authService.releaseUserName();
             }
           }
         },

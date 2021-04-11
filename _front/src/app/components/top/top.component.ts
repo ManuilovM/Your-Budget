@@ -34,7 +34,8 @@ export class TopComponent implements OnInit {
       this.name = userName;
       this.isLogin =!!userName;
     }});
-    this.authService.getUserName();
+    this.authService.releaseUserName();
+
   }
 
   showRegForm(){

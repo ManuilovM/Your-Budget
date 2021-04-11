@@ -61,12 +61,12 @@ export class LoginComponent implements OnInit {
 
   }
   
-  forgotPass(){
+  forgotPass(){ // clickFogotPassword
     let loginFormSubmit: UserLoginForm = this.loginForm.value;
     if(!loginFormSubmit.email) this._snackBar.open("Введите Email", "Ошибка!");
      else{
        if(!loginFormSubmit.isSaveTable) this.budgetItemsService.clearBudgetItems();
-      this.authService.forgetPass(loginFormSubmit.email).subscribe(
+      this.authService.forgetPass(loginFormSubmit.email).subscribe( // 
         (data:Answer)=>{
           if(data.success) this._snackBar.open("На Ваш Email сейчас прийдет письмо с сылкой для смены пароля. Пожалуйста перейдите по ней","Успешно!");
           else{

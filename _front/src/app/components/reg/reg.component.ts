@@ -41,14 +41,12 @@ export class RegComponent implements OnInit {
  
   submit(){
     let regFormSubmit:RegFormValues= this.regForm.value;
-    this.authService.registerUser(regFormSubmit).subscribe(
+
+    this.authService.sendRegisterForm(regFormSubmit).subscribe(
       (data:Answer)=>{ 
-        if(data.success){ 
-          
           this._snackBar.open(data.msg, "Успешно!", {
             duration: 2000,
           });
-
           this.dialogRef.close();
           this.authService.loginUser({email: regFormSubmit.email, password: regFormSubmit.password, isSaveTable: regFormSubmit.isSaveTable }).subscribe(
             (data:Answer)=>{
@@ -57,17 +55,14 @@ export class RegComponent implements OnInit {
               } else this._snackBar.open(data.msg, "Ошибка!");
             }
           )
-        }
-        else{
-          this._snackBar.open(data.msg, "Ошибка!");
-        }
       },
       err=>{
         console.log(err); 
         this._snackBar.open(err.message, "Ошибка!")
       }
-    )//end subscribe of registerUser
+    )
   }
+
 
   showPrivacyPolicy(){
     window.open(this.router.serializeUrl(this.router.createUrlTree(["/privacy"])));

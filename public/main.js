@@ -656,7 +656,11 @@ class RegComponent {
     }
     submit() {
         let regFormSubmit = this.regForm.value;
-        this.authService.registerUser(regFormSubmit).subscribe((data) => {
+        if (!regFormSubmit.privacyPolicy) {
+            this._snackBar.open("Нет согласия с Политикой Конфидециальности", "Ошибка!");
+            return false; // need test
+        }
+        this.authService.sendRegisterForm(regFormSubmit).subscribe((data) => {
             if (data.success) {
                 this._snackBar.open(data.msg, "Успешно!", {
                     duration: 2000,
@@ -677,7 +681,7 @@ class RegComponent {
         }, err => {
             console.log(err);
             this._snackBar.open(err.message, "Ошибка!");
-        }); //end subscribe of registerUser
+        });
     }
     showPrivacyPolicy() {
         window.open(this.router.serializeUrl(this.router.createUrlTree(["/privacy"])));
@@ -1001,7 +1005,8 @@ class LoginComponent {
         else {
             if (!loginFormSubmit.isSaveTable)
                 this.budgetItemsService.clearBudgetItems();
-            this.authService.forgetPass(loginFormSubmit.email).subscribe((data) => {
+            this.authService.forgetPass(loginFormSubmit.email).subscribe(// 
+            (data) => {
                 if (data.success)
                     this._snackBar.open("На Ваш Email сейчас прийдет письмо с сылкой для смены пароля. Пожалуйста перейдите по ней", "Успешно!");
                 else {
@@ -1702,7 +1707,7 @@ class ChangePassComponent {
                 if (data.success) {
                     localStorage.removeItem("tempPassToken");
                     this._snackBar.open("Пароль успешно заменен", "Успешно!", { duration: 2000, });
-                    this.authService.getUserName();
+                    this.authService.releaseUserName(); // Why???
                     this.dialogRef.close();
                     this.router.navigate(['/']);
                 }
@@ -1712,7 +1717,7 @@ class ChangePassComponent {
                         this._snackBar.open("Истек срок действительности временного пароля. После завершения текущей сессии повторите попытку.", "Ошибка");
                         this.dialogRef.close();
                         this.router.navigate(['/']);
-                        this.authService.getUserName();
+                        this.authService.releaseUserName();
                     }
                 }
             }, err => { console.log(err); });
@@ -1825,17 +1830,11 @@ class AuthService {
         this.hostService = hostService;
         this.subject = new rxjs__WEBPACK_IMPORTED_MODULE_2__["Subject"]();
     }
-    registerUser(regFormValues) {
-        if (!regFormValues.privacyPolicy)
-            return new rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"](subscriber => {
-                subscriber.next(JSON.stringify({ success: false, msg: "Нет согласия с Политикой Конфидециальности" }));
-            });
-        else {
-            let headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpHeaders"]();
-            headers.append("contentType", "application/json");
-            return this.http
-                .post(this.hostService.getHost() + "account/reg", regFormValues, { headers: headers });
-        }
+    sendRegisterForm(regFormValues) {
+        let headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpHeaders"]();
+        headers.append("contentType", "application/json");
+        return this.http
+            .post(this.hostService.getHost() + "account/reg", regFormValues, { headers: headers });
     }
     loginUser(user) {
         let headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpHeaders"]();
@@ -1861,20 +1860,13 @@ class AuthService {
         return new rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"](subscriber => {
             this.http
                 .post(this.hostService.getHost() + "account/logout", logout, { headers: headers }).subscribe((data) => {
-                if (data.success) {
-                    this.userName = null;
-                    localStorage.clear();
-                    this.subject.next(this.userName);
-                }
-                else {
-                    localStorage.clear();
-                    this.getUserName();
-                }
+                localStorage.clear();
+                this.releaseUserName();
                 subscriber.next(data);
             });
         });
     }
-    getUserName() {
+    releaseUserName() {
         this.userName = localStorage.getItem("userName");
         this.subject.next(this.userName);
     }
@@ -1892,7 +1884,7 @@ class AuthService {
                     localStorage.setItem("userName", data.userName);
                     localStorage.setItem("accessToken", data.accessToken);
                     localStorage.setItem("refreshToken", data.refreshToken);
-                    this.getUserName();
+                    this.releaseUserName();
                     subscriber.next({ success: true, msg: "OK" });
                 }
                 else {
@@ -1926,7 +1918,7 @@ class AuthService {
                     localStorage.setItem("accessToken", data.accessToken);
                     localStorage.setItem("refreshToken", data.refreshToken);
                     localStorage.setItem("tempPassToken", data.tempPassToken);
-                    this.getUserName();
+                    this.releaseUserName();
                     subscriber.next({ success: true, msg: data.msg, data: data });
                 }
                 else {
@@ -1949,7 +1941,7 @@ class AuthService {
             this.http.post(this.hostService.getHost() + "account/deleteAkk", body, { headers: headers }).subscribe((data) => {
                 if (data.success) {
                     localStorage.clear();
-                    this.getUserName();
+                    this.releaseUserName();
                     subscriber.next(data);
                 }
                 else {
@@ -2222,7 +2214,7 @@ class TopComponent {
                 this.name = userName;
                 this.isLogin = !!userName;
             } });
-        this.authService.getUserName();
+        this.authService.releaseUserName();
     }
     showRegForm() {
         this.dialog.open(_reg_reg_component__WEBPACK_IMPORTED_MODULE_3__["RegComponent"], { width: '300px' });
